@@ -11,6 +11,8 @@ interface Blog {
   authorImage: string; // ✅ Fixed typo
   description: string;
   Category: string;
+  Smlldescription: string;
+  Date: string;
 }
 
 // Props type definition
@@ -20,26 +22,29 @@ interface BlogsGridProps {
 
 export default function BlogsGrid({ data }: BlogsGridProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid mt-12 mb-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
       {data.map((blog) => (
-        <div key={blog.id} className=" rounded-md group">
-          <img
-            src={blog.image}
-            alt={blog.topic}
-            className="h-64 w-full  rounded-md overflow-hidden object-cover overflow-hidden "
-            loading="lazy"
-          />
-          <div className="px-2 mt-3 mb-2 py-1 bg-slate-950  w-max rounded-full">
-            <h1 className=" font-bold  text-white">{blog.Category}</h1>
+        <Link
+          href={`blogs/${blog.id}`}
+          key={blog.id}
+          className="bg-white  rounded-lg overflow-hidden group h-full flex flex-col justify-baseline"
+        >
+          <div className="relative group">
+            <img
+              src={blog.image}
+              alt={blog.id}
+              className="w-full h-48 object-cover group-hover:scale-110 transition-all duration-300"
+            />
+            <span className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded">
+              {blog.topic}
+            </span>
           </div>
-          <p className="text-xl font-semibold">{blog.topic}</p>
-          <Link
-            className="hover:underline-offset-2 hover:underline transition-all duration-200"
-            href={`blogs/${blog.id}`}
-          >
-            Read more
-          </Link>
-        </div>
+          <div className="p-4">
+            <p className="text-gray-500 text-sm">{blog.Date}</p>
+            <h3 className="text-lg font-semibold mt-2">{blog.topic}</h3>
+            <p>{blog.Smlldescription}</p>
+          </div>
+        </Link>
       ))}
     </div>
   );

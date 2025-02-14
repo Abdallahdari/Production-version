@@ -42,7 +42,7 @@ export default function Page() {
               <p className="text-gray-400">
                 Do not have an account,
                 <Link
-                  href="/register"
+                  href="/signup"
                   className="underline ml-1 hover:no-underline hover:text-gray-600 transition-all duration-200"
                 >
                   create a new one.

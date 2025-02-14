@@ -1,5 +1,5 @@
-import Link from "next/link";
 import React from "react";
+
 interface Data {
   id: string;
   image: string;
@@ -8,60 +8,62 @@ interface Data {
   autherImage: string;
   description: string;
   Category: string;
+  Smlldescription: string;
+  Date: string;
 }
+
 interface OneBlogs {
   data: Data;
   Allproduct: Data[];
 }
+
 export default function Blogitem({ data, Allproduct }: OneBlogs) {
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      {/* Main Featured Post */}
-      <div className="flex flex-col items-center md:flex-row gap-9 mb-8">
+    <div className="max-w-4xl mx-auto p-6 text-gray-700 mt-12">
+      <div className="mt-4 space-y-4">
+        {/* Image with 35% height but full width */}
         <img
           src={data.image}
-          alt={data.title}
-          className="w-[450px] h-80 object-cover rounded-xl"
+          alt={data.id}
+          className="w-full object-cover"
+          style={{ height: "45vh" }} // 35% of viewport height
         />
-        <div className="flex-1">
-          <h3 className="text-xl font-semibold mb-2">{data.topic}</h3>
-          <p className="text-gray-600 mb-4">{data.description}</p>
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <img
-              src={data.autherImage} // Placeholder avatar
-              alt="Author"
-              className="w-6 h-6 rounded-full"
-            />
-            • <span>{data.aouther}</span>
-          </div>
-        </div>
+        <p>{data.description}</p>
+        <p>
+          Synergistically drive e-business leadership with unique synergy.
+          Compellingly seize market positioning ROI and bricks-and-clicks
+          e-markets.
+        </p>
+        <blockquote className="border-l-4 border-orange-500 pl-4 text-2xl font-semibold text-orange-700">
+          {data.Smlldescription}
+        </blockquote>
+        <p>
+          Compellingly enhance seamless resources through competitive content.
+          Continually actualize 24/365 alignments for resource-leveling
+          platforms.
+        </p>
       </div>
+      <div className="mt-6 flex space-x-2">
+        <span className="bg-gray-200 px-3 py-1 text-sm rounded-full">
+          {data.Category}
+        </span>
 
-      {/* Other Posts */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-7 mt-24 mb-7">
-        {Allproduct.map((blog) => (
-          <Link
-            href={`/blogs/${blog.id}`}
-            key={blog.id}
-            className=" rounded-md group"
-          >
-            <img
-              src={blog.image}
-              alt={blog.topic}
-              className="h-64 w-full rounded-md group-hover:scale-105 transition-all duration-300 "
-            />
-            <div className="px-2 mt-3 mb-2 py-1 bg-slate-950  w-max rounded-full">
-              <h1 className=" font-bold  text-white">{blog.Category}</h1>
-            </div>
-            <p className="text-xl font-semibold">{blog.topic}</p>
-            <p
-              className="hover:underline-offset-2 hover:underline transition-all duration-200"
-              // href={`/blogs/${blog.id}`}
-            >
-              Read more
-            </p>
-          </Link>
-        ))}
+        <span className="bg-gray-200 px-3 py-1 text-sm rounded-full">
+          DESIGN
+        </span>
+      </div>
+      <div className="mt-8 flex items-center gap-2 mb-7 border-b pb-4">
+        <img
+          src={data.autherImage}
+          alt={data.id}
+          className="rounded-full h-12 w-12"
+        />
+
+        <div className="">
+          <p className="text-sm font-semibold">By Jennifer Lawrence</p>
+          <p className="text-xs text-gray-500">Thinker & Designer</p>
+          <span>{data.Date}</span>
+        </div>
       </div>
     </div>
   );

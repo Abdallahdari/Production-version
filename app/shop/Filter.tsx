@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-import { Dai_Banna_SIL } from "next/font/google";
 import Loader from "../loading";
 
 interface Products {
@@ -12,6 +11,7 @@ interface Products {
   description: string;
   price: string;
   Category: string;
+  Discount: string;
 }
 
 interface Prod {
@@ -146,12 +146,15 @@ export default function Filter({ data }: Prod) {
                 key={item.id}
                 className="border block overflow-hidden group rounded-md"
               >
-                <div>
+                <div className="relative">
                   <img
                     src={item.image}
                     alt={item.name}
                     className="w-full group-hover:scale-105 transition-all duration-200 h-64 object-cover rounded-t-lg"
                   />
+                  <span className="absolute top-2 left-2 bg-red-500 text-white text-sm px-2 py-1 rounded">
+                    %{item.Discount}
+                  </span>
                 </div>
                 <div className="px-4 my-3 ">
                   <h1 className="text-xl font-semibold">{item.name}</h1>

@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#030712] text-gray-400 pt-14 py-5">
+    <footer className="px-4 bg-[#030712] text-gray-400 pt-14 py-5">
       <div className="container mx-auto xl:max-w-[1200px] grid grid-cols-1 md:grid-cols-5 gap-8">
         {/* Dalab Section */}
         <div>

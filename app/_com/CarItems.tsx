@@ -43,7 +43,7 @@ export default function CarItems({ cart }) {
               <thead className="bg-black text-white">
                 <tr>
                   <th className="p-3 text-left">Product</th>
-                  <th className="p-3">Price</th>
+                  <th className="p-3">Pricee</th>
                   <th className="p-3">Quantity</th>
                   <th className="p-3">Total</th>
                 </tr>

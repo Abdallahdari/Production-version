@@ -19,9 +19,9 @@ export default function Mostpopular() {
   return (
     <div>
       <ToastContainer />
-      <div className="bg-white py-8 my-4">
+      <div className="bg-white py-8 my-4 px-4">
         <div className="container mx-auto xl:max-w-[1200px]">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-center md:justify-between mb-8">
             <div className="text">
               <h1 className="text-2xl font-bold ">Most Popular Product</h1>
             </div>

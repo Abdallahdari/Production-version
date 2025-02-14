@@ -1,46 +1,37 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-// Define the type for a single cart item
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  photo: string;
-  quantity: number;
-  totalPrice: number;
-}
-
-// Define the state type
-interface CartState {
-  cart: CartItem[];
-}
-
-// Initial state
-const initialState: CartState = {
+const initialState = {
   cart: [],
 };
 
-// Create the slice
-const productSlice = createSlice({
+const ProductSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    // Add item to cart
-    Addingcar(){}
-      
+    Addingcart(state, action) {
+      const existingItem = state.cart.find(
+        (item) => item.id === action.payload.id
+      );
 
-    // Remove item from cart
-    Dele: (state, action: PayloadAction<string>) => {
+      if (existingItem) {
+        existingItem.quantity += 1;
+        existingItem.totalPrice += action.payload.price; // Update total price
+      } else {
+        state.cart.push({
+          ...action.payload,
+          quantity: 1, // Initialize quantity
+          totalPrice: action.payload.price, // Store total price for easy calculations
+        });
+      }
+    },
+    Dele(state, action) {
       state.cart = state.cart.filter((item) => item.id !== action.payload);
     },
   },
 });
 
-// Selectors
-export const Getitem = (state: { product: CartState }) => state.product.cart;
-export const GetTotalItems = (state: { product: CartState }) =>
-  state.product.cart.reduce((total, item) => total + item.quantity, 0);
+export const Getitem = (state) => state.product.cart; // Get cart items
+export const GetTotalItems = (state) => state.product.cart.length; // Get total number of items in the cart
 
-// Export actions and reducer
-export const { Addingcart, Dele } = productSlice.actions;
-export default productSlice.reducer;
+export const { Addingcart, Dele } = ProductSlice.actions;
+export default ProductSlice.reducer;

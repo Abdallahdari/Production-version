@@ -65,6 +65,10 @@ export default function Singlepro({ product, similarProduct }) {
               ${product.price}
             </p>
             <p className="mt-2 text-gray-700">{product.description}</p>
+            <p className="mt-2 text-gray-700">
+              Discount{" "}
+              <span className="text-red-500"> %{product.Discount}</span>
+            </p>
 
             <div className="mt-4 my-6">
               <div className="flex items-center gap-4">

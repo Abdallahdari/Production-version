@@ -52,3 +52,11 @@ export async function GetsingleBLog(id) {
   }
   return data;
 }
+
+export async function Getcountris() {
+  const { data, error } = await supabase.from("Countries").select("*");
+  if (error) {
+    console.log("API_error", error);
+  }
+  return data;
+}

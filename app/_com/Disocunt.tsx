@@ -26,7 +26,7 @@ export default async function Discount() {
           Discount 40%
         </h1>
 
-        <ul className="grid md:grid-cols-4 gap-4">
+        <ul className="grid md:grid-cols-4 gap-4 px-4">
           {visible?.map((item) => {
             const shortenedDesc = shortenDescription(item.description); // Apply shortening here
             return (
@@ -41,14 +41,20 @@ export default async function Discount() {
                     alt={item.name}
                     className="w-full group-hover:scale-105 transition-all duration-200 h-64 object-cover rounded-t-lg"
                   />
-                  <span className="absolute top-2 left-2 bg-red-500 text-white text-sm px-2 py-1 rounded">
-                    -10%
-                  </span>
-                </div>
-                <div className="p-4 mt-3">
-                  <h3 className="text-lg font-medium truncate">{item.name}</h3>
-                  <div className="flex items-center justify-between mt-2">
-                    <div>
+                  {item.Discount ? (
+                    <>
+                      <span className="absolute top-2 left-2 bg-red-500 text-white text-sm px-2 py-1 rounded">
+                        %{item.Discount}
+                      </span>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  <h3 className="text-lg px-4 mt-2 font-medium truncate">
+                    {item.name}
+                  </h3>
+                  <div className="flex items-center justify-between my-2">
+                    <div className="px-4">
                       {/* Use shortened description here */}
                       <span>{shortenedDesc}</span>
                       <span className="text-gray-500 line-through text-sm">
