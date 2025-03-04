@@ -103,7 +103,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-gray-700 mt-10 pt-5 text-center">
-        <p>Copyright © 2024. All rights reserved.</p>
+        <p>Copyright © {new Date().getFullYear()}. All rights reserved.</p>
       </div>
     </footer>
   );

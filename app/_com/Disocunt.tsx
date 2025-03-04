@@ -22,9 +22,7 @@ export default async function Discount() {
 
     return (
       <div className="container mx-auto xl:max-w-[1200px]">
-        <h1 className="text-4xl font-semibold text-center my-12">
-          Discount 40%
-        </h1>
+        <h1 className="text-4xl font-semibold text-center my-12">Top sale</h1>
 
         <ul className="grid md:grid-cols-4 gap-4 px-4">
           {visible?.map((item) => {

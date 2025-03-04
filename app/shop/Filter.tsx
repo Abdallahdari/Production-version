@@ -23,6 +23,7 @@ export default function Filter({ data }: Prod) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
   const [loading, Setloading] = useState(false);
+  const [Isopen, Setisopn] = useState(false);
   // Extract unique categories from data
   const categories = Array.from(
     new Set(data.map((product) => product.Catogery))
@@ -69,71 +70,52 @@ export default function Filter({ data }: Prod) {
     Setloading(false);
   }, [selectedCategories, selectedPriceRanges, data]);
 
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
-  };
+  // const handleCategoryChange = (category: string) => {
+  //   setSelectedCategories((prev) =>
+  //     prev.includes(category)
+  //       ? prev.filter((c) => c !== category)
+  //       : [...prev, category]
+  //   );
+  // };
 
-  const handlePriceChange = (label: string) => {
-    setSelectedPriceRanges((prev) =>
-      prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
-    );
-  };
+  // const handlePriceChange = (label: string) => {
+  //   setSelectedPriceRanges((prev) =>
+  //     prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
+  //   );
+  // };
 
   return (
     <div className="container mx-auto xl:max-w-[1450px] py-12 mt-12">
       <div className="grid md:grid-cols-[17rem_1fr] gap-4">
-        <div className="">
-          <div className="w-64 space-y-6 sticky top-20">
-            {/* Categories Section */}
-            <div className="space-y-4 border px-6 py-5 rounded-md">
-              <h2 className="text-lg font-semibold">Categories</h2>
-              <div className="space-y-2">
-                {categories.map((category, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`category-${index}`}
-                      checked={selectedCategories.includes(category.name)}
-                      onCheckedChange={() =>
-                        handleCategoryChange(category.name)
-                      }
-                    />
-                    <label
-                      htmlFor={`category-${index}`}
-                      className="text-sm font-medium"
-                    >
-                      {category.name} ({category.count})
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
+        <div className="p-4 bg-gray-50 min-h-screen">
+          <h2 className="text-lg font-semibold mb-4">Filters</h2>
 
-            {/* Price Range Section */}
-            <div className="space-y-4 border px-6 py-5 rounded-md">
-              <h2 className="text-lg font-semibold">Price Range</h2>
-              <div className="space-y-3">
-                {priceRanges.map((range, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`price-${index}`}
-                      checked={selectedPriceRanges.includes(range.label)}
-                      onCheckedChange={() => handlePriceChange(range.label)}
-                    />
-                    <label
-                      htmlFor={`price-${index}`}
-                      className="text-sm font-medium"
-                    >
-                      {range.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
+          {/* Size Filter */}
+          <div className="mb-6">
+            <h3 className="text-sm font-semibold mb-2">Size</h3>
+            <div className="grid md:grid-cols-3 gap-2">
+              {["XS", "S", "M", "L", "XL", "2X"].map((size) => (
+                <button
+                  key={size}
+                  className="border border-gray-500 px-4 py-1 rounded hover:bg-gray-200"
+                >
+                  {size}
+                </button>
+              ))}
             </div>
           </div>
+
+          {/* Availability Filter */}
+
+          {/* Collapsible Sections */}
+          {["Category", "Ratings"].map((section) => (
+            <div key={section} className="mb-4">
+              <div className="flex justify-between items-center">
+                <h3 className="text-sm font-semibold">{section}</h3>
+                <span>&#x276F;</span>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="grid md:grid-cols-3 gap-4 overflow-hidden">
