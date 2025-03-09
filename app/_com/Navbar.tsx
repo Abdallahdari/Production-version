@@ -1,18 +1,23 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
+import { CiMenuFries } from "react-icons/ci";
+import { FaTimes } from "react-icons/fa";
+import { IoIosArrowForward } from "react-icons/io";
+import { MdOutlineHome } from "react-icons/md";
 
 export default function Navbar() {
   const [item, Setitem] = useState(0);
+  const [Isopen, Setisopn] = useState(false);
   return (
-    <div>
+    <div className="relative">
       <div className="w-full fixed top-0 left-0  shadow z-50 bg-white">
-        <div className="container mx-auto xl:max-w-[1200px] ">
-          <div className="flex items-center justify-between py-5 ">
+        <div className="container mx-auto xl:max-w-[1200px] px-4">
+          <div className="flex items-center justify-between py-2 md:py-5 ">
             <h1 className="text-xl font-bold">
               <Link href={"/"}>Dalab</Link>
             </h1>
-            <ul className="flex items-center gap-7">
+            <ul className="hidden md:flex  items-center gap-7">
               <li className="">
                 <Link
                   href={"/"}
@@ -46,7 +51,7 @@ export default function Navbar() {
                 </Link>
               </li>
             </ul>
-            <div className="flex items-center gap-7">
+            <div className="hidden md:flex items-center gap-7 ">
               <Link href={"/Login"}>
                 <svg
                   className="fill-black hover:fill-[#1E90FF] cursor-pointer transition-all duration-200"
@@ -75,9 +80,67 @@ export default function Navbar() {
                 </div>
               </Link>
             </div>
+            <div className="block md:hidden">
+              {Isopen ? (
+                <FaTimes onClick={() => Setisopn(false)} />
+              ) : (
+                <CiMenuFries onClick={() => Setisopn(true)} />
+              )}
+            </div>
           </div>
         </div>
       </div>
+      {Isopen && (
+        <div className="mobile-nav    w-full z-50 fixed  inset-0 bg-white h-full ">
+          <div>
+            <div className="flex items-center justify-between  px-3 py-3">
+              <div>
+                <h1 className="text-xl font-bold">Dalab</h1>
+              </div>
+              <div className="">
+                {" "}
+                <FaTimes onClick={() => Setisopn(false)} />
+              </div>
+            </div>
+          </div>
+          <div className="mobile-Links">
+            <ul className="flex py-3 flex-col gap-5 px-3 ">
+              <li className="flex items-center justify-between border-b ">
+                <Link onClick={() => Setisopn(false)} href={"/"}>
+                  Home
+                </Link>
+                <span>
+                  <IoIosArrowForward />
+                </span>
+              </li>
+              <li className="flex items-center justify-between border-b ">
+                <Link onClick={() => Setisopn(false)} href={"/shop"}>
+                  Shop
+                </Link>
+                <span>
+                  <IoIosArrowForward />
+                </span>
+              </li>
+              <li className="flex items-center justify-between border-b ">
+                <Link onClick={() => Setisopn(false)} href={"/blogs"}>
+                  Blog
+                </Link>
+                <span>
+                  <IoIosArrowForward />
+                </span>
+              </li>
+              <li className="flex items-center justify-between border-b ">
+                <Link onClick={() => Setisopn(false)} href={"/login"}>
+                  Login
+                </Link>
+                <span>
+                  <IoIosArrowForward />
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

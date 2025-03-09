@@ -87,7 +87,7 @@ export default function Filter({ data }: Prod) {
   return (
     <div className="container mx-auto xl:max-w-[1450px] py-12 mt-12">
       <div className="grid md:grid-cols-[17rem_1fr] gap-4">
-        <div className="p-4 bg-gray-50 min-h-screen">
+        <div className="p-4 h-max bg-gray-50 ">
           <h2 className="text-lg font-semibold mb-4">Filters</h2>
 
           {/* Size Filter */}

@@ -1,20 +1,29 @@
 import React, { Suspense } from "react";
-import Discount from "./_com/Disocunt";
 import Header from "./_com/Header";
-import Mostpopular from "./_com/Mostpopular";
 import Catogreis from "./_com/Catogreis";
 import Loader from "./loading";
 import FAQSection from "./_com/FAQSection";
+import Topsalte from "./_com/Topsalte";
+import NEWST from "./_com/NEWST";
+import Testimonials from "./_com/Testimonials";
 
 export default function page() {
   return (
     <div>
       <Header />
+
+      <Suspense fallback={<Loader />}>
+        <Topsalte />
+      </Suspense>
+      <Suspense fallback={<Loader />}>
+        <NEWST />
+      </Suspense>
       <Catogreis />
       <Suspense fallback={<Loader />}>
-        <Discount />
+        {" "}
+        <Testimonials />
       </Suspense>
-      <Mostpopular />
+
       <FAQSection />
     </div>
   );

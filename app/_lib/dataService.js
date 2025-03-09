@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { supabase } from "./supabase";
 
 export async function getCabinas() {
@@ -57,6 +58,40 @@ export async function Getcountris() {
   const { data, error } = await supabase.from("Countries").select("*");
   if (error) {
     console.log("API_error", error);
+  }
+  return data;
+}
+
+export async function TOpProduct() {
+  const { data, error } = await supabase.from("TopProduct").select("*");
+  if (error) {
+    console.log("Eror", error.message);
+  }
+  console.log("top", data);
+
+  return data;
+}
+
+export async function Topselling() {
+  const { data, error } = await supabase.from("TopSelling").select("*");
+  if (error) {
+    console.log("error", error.message);
+  }
+  return data;
+}
+
+export async function Reviews() {
+  const { data, error } = await supabase.from("Testimonials").select("*");
+  if (error) {
+    console.log("error", error.message);
+  }
+  return data;
+}
+
+export async function Quostions() {
+  const { data, error } = await supabase.from("MostQuetions").select("*");
+  if (error) {
+    console.log("error", error.message);
   }
   return data;
 }

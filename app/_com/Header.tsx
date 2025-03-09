@@ -5,9 +5,9 @@ import { Pagination, Autoplay } from "swiper/modules";
 import Link from "next/link";
 import "swiper/css";
 import "swiper/css/pagination";
-import sawir1 from "@/public/bags.jpg";
-import sawir2 from "@/public/kabo.jpg";
-import sawir3 from "@/public/Abbaya.jpg";
+import sawir1 from "@/public/image.png";
+import sawir2 from "@/public/image.png";
+import sawir3 from "@/public/image.png";
 
 export default function Header() {
   const slides = [
@@ -43,19 +43,21 @@ export default function Header() {
           {slides.map((slide, index) => (
             <SwiperSlide key={index}>
               <div
-                className="slider-item h-full w-full flex items-center justify-center relative bg-cover bg-center"
+                className="slider-item h-full w-full flex items-center   bg-cover bg-center"
                 style={{ backgroundImage: `url(${slide.image.src})` }}
               >
-                <div className="text-center text-white z-10">
-                  <div className="text-sub-display text-xl font-semibold mb-4">
-                    {slide.subtitle}
-                  </div>
-                  <div className="text-display text-4xl font-bold mb-6">
-                    {slide.title}
-                  </div>
+                <div className="px-5 md:px-24 text-black z-10">
+                  <h1 className=" mb-5 uppercase text-2xl md:text-7xl font-extrabold">
+                    Find clothes <br /> That matches <br /> Your style
+                  </h1>
+
+                  <p className="mb-5 text-gray-700 max-w-[250px] md:max-w-max">
+                    Order now and get in 72hours And also get 24hour support{" "}
+                  </p>
+
                   <Link
                     href="/shop"
-                    className="button-main bg-white text-black  hover:bg-slate-950 hover:text-white transition-all duration-300  px-6 py-3 rounded-md"
+                    className="button-main bg-slate-950 mt-5 text-white   hover:bg-white hover:text-black transition-all duration-300  px-5 md:px-10 rounded-full py-2  md:py-3 "
                   >
                     Shop Now
                   </Link>

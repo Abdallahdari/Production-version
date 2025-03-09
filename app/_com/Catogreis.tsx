@@ -1,5 +1,4 @@
 import React from "react";
-import { getCabinas } from "../_lib/dataService";
 const catogries = [
   { name: "shoes", photo: "/kabo.jpg" },
   { name: "Men Clothes", photo: "/Men-shoes.jpg" },
@@ -21,7 +20,7 @@ export default async function Catogreis() {
           </p>
 
           {/* Grid Layout */}
-          <div className="grid grid-cols-1 grid- md:grid-cols-2 md:grid-r-w lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 grid- md:grid-cols-2 md:grid-r-w  gap-6">
             {catogries.map((category) => (
               <div
                 key={category.id}
