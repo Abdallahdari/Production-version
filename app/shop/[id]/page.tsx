@@ -12,7 +12,7 @@ export default async function page({ params }: { params: { id: string } }) {
   console.log("similar", similarProduct);
   return (
     <div className="py-12">
-      <Singlepro product={product} similarProduct={similarProduct} />
+      <Singlepro product={product} />
     </div>
   );
 }

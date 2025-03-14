@@ -4,10 +4,7 @@ import React from "react";
 
 export default async function page({ params }: { params: { id: string } }) {
   const data = await GetsingleBLog(params.id);
-  const semilar = await GetAllbolgs();
-  const Allproduct = semilar?.filter(
-    (item) => item.Category === data.Category && item.id !== data.id
-  );
+  const Allproduct = await GetAllbolgs();
 
   console.log("data", data);
 

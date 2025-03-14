@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { supabase } from "./supabase";
 
 export async function getCabinas() {
@@ -10,6 +9,7 @@ export async function getCabinas() {
     console.log(error);
     // throw new Error("Cabins could not be loaded");
   }
+  console.log("data", data);
 
   return data;
 }
@@ -23,6 +23,8 @@ export async function GetsingleProduct(id) {
   if (error) {
     console.log("error no fetching signle", error);
   }
+  console.log("data", data);
+
   return data;
 }
 
@@ -31,6 +33,8 @@ export async function Cart() {
   if (error) {
     console.log("the fetchieng is not working ", error);
   }
+  console.log("data", data);
+
   return data;
 }
 
@@ -39,6 +43,8 @@ export async function GetAllbolgs() {
   if (error) {
     console.log("error", error);
   }
+  console.log("data", data);
+
   return data;
 }
 
@@ -51,6 +57,8 @@ export async function GetsingleBLog(id) {
   if (error) {
     console.log("error", error);
   }
+  console.log("data", data);
+
   return data;
 }
 
@@ -59,6 +67,8 @@ export async function Getcountris() {
   if (error) {
     console.log("API_error", error);
   }
+  console.log("data", data);
+
   return data;
 }
 
@@ -67,6 +77,7 @@ export async function TOpProduct() {
   if (error) {
     console.log("Eror", error.message);
   }
+
   console.log("top", data);
 
   return data;
@@ -77,6 +88,8 @@ export async function Topselling() {
   if (error) {
     console.log("error", error.message);
   }
+  console.log("data", data);
+
   return data;
 }
 
@@ -85,6 +98,8 @@ export async function Reviews() {
   if (error) {
     console.log("error", error.message);
   }
+  console.log("data", data);
+
   return data;
 }
 
@@ -93,5 +108,51 @@ export async function Quostions() {
   if (error) {
     console.log("error", error.message);
   }
+  console.log("data", data);
+
+  return data;
+}
+
+export async function Addtocart(newItem) {
+  try {
+    // Ensure all fields are present
+    if (!newItem.id || !newItem.name || !newItem.price || !newItem.quantity) {
+      throw new Error("Invalid input: All fields are required");
+    }
+
+    console.log("Adding item to cart:", newItem);
+
+    const { data, error } = await supabase
+      .from("Cart")
+      .insert([
+        {
+          product_id: newItem.id,
+          name: newItem.name,
+          price: newItem.price,
+          quantity: newItem.quantity,
+        },
+      ])
+      .select();
+
+    if (error) {
+      console.error("Supabase error:", error);
+      throw new Error(error.message);
+    }
+
+    console.log("Item added successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    throw error;
+  }
+}
+
+export async function Getorders() {
+  const { data, error } = await supabase.from("Orders").select("*");
+  if (error) {
+    console.log("error", error.message);
+  }
+  console.log("data", data);
+
   return data;
 }

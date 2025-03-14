@@ -50,11 +50,13 @@ export default function ContactForm() {
               <form className="space-y-4 ">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input
+                    required
                     type="text"
                     placeholder="Your Name"
                     className="bg-white "
                   />
                   <Input
+                    required
                     type="email"
                     placeholder="Your E-mail"
                     className="bg-white"
@@ -63,11 +65,13 @@ export default function ContactForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input
+                    required
                     type="tel"
                     placeholder="Phone Number"
                     className="bg-white"
                   />
                   <Input
+                    required
                     type="text"
                     placeholder="Subject"
                     className="bg-white"
@@ -75,6 +79,7 @@ export default function ContactForm() {
                 </div>
 
                 <Textarea
+                  required
                   placeholder="Message"
                   className="min-h-[150px] bg-white"
                 />

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Suspense } from "react";
 import Loader from "../loading";
 import { Quostions } from "../_lib/dataService";
+import Link from "next/link";
 
 export default async function FAQSection() {
   const data = await Quostions();
@@ -23,9 +24,11 @@ export default async function FAQSection() {
           <p className="text-muted-foreground">
             Everything You Need to Know About Shopping With Us
           </p>
-          <Button className="bg-blue-500 hover:bg-blue-600 text-white">
-            Ask A Question
-          </Button>
+          <Link href={"/contactus"}>
+            <Button className="bg-blue-500 my-2 hover:bg-blue-600 text-white">
+              Ask A Question
+            </Button>
+          </Link>
         </div>
         <Suspense fallback={<Loader />}>
           <Accordion type="single" collapsible className="w-full">

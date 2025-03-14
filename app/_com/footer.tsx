@@ -1,110 +1,125 @@
 import Link from "next/link";
 import React from "react";
+import { TiSocialFacebook } from "react-icons/ti";
+import { IoLogoInstagram } from "react-icons/io5";
+import { FaGithub } from "react-icons/fa";
+import Marquee from "react-fast-marquee";
 
-export default function Footer() {
+export default function footer() {
   return (
-    <footer className="px-4 bg-[#030712] text-gray-400 pt-14 py-5">
-      <div className="container mx-auto xl:max-w-[1200px] grid grid-cols-1 md:grid-cols-5 gap-8">
-        {/* Dalab Section */}
-        <div>
-          <h3 className="text-white text-xl font-bold mb-4">Dalab</h3>
-          <p>
-            The best place to find exclusive products. Shop with us for an
-            amazing experience.
-          </p>
-        </div>
+    <div className="bg-[#F0F0F0]  ">
+      <div className="container mx-auto  px-7 xl:max-w-[1200px] relative">
+        {/* <div className="rounded-lg  bg-slate-900 w-full py-7 px-9 md:px-16 absolute  -translate-y-1/2">
+          <div className="grid md:grid-cols-[1fr_20rem] justify-between  gap-y-5">
+            <h1 className="text-4xl uppercase font-extrabold md:max-w-[65%] text-white">
+              stay upto Date About our Lates offers
+            </h1>
+            <div className="   ">
+              <div className="flex flex-col w-full items-center justify-center gap-5">
+                {" "}
+                <div className="w-full relative flex items-center">
+                  <Input
+                    placeholder="Enter your Email "
+                    className=" w-full rounded-full px-10 py-2 border focus:border-blue-700 focus:scale-105 transition-all duration-200  bg-white "
+                  />
+                  <span className="absolute left-3">
+                    <MdOutlineMail className="text-[20px]" />
+                  </span>
+                </div>
+                <button className="px-5 py-2 w-full active:scale-75 bg-white rounded-full hover:bg-black hover:text-white  transition-all duration-300">
+                  Subscribe to NewSletter
+                </button>
+              </div>
+            </div>
+          </div>
+        </div> */}
+        <div className="grid sm:grid-cols-2 py-5 border-b  md:grid-cols-4 gap-4 pt-36">
+          <div className="flex flex-col justify-between  h-full">
+            <h1 className="text-3xl font-extrabold font-satoshi">DALAB</h1>
+            <p className="text-gray-600 text-[14px] font-satoshi max-w-[200px]">
+              We have clothes that suits your and which you &#x2019; re proud to
+              wear. From women to men
+            </p>
+            <div className="flex items-center gap-3">
+              <Link href={"/"}>
+                <div className="w-10 h-10 flex items-center justify-center border rounded-full transition-all duration-300 hover:bg-black">
+                  <TiSocialFacebook className="text-black hover:text-white text-2xl transition-all duration-300" />
+                </div>{" "}
+              </Link>
+              <Link href={`/`}>
+                <div className="w-10 h-10 flex items-center justify-center border rounded-full transition-all duration-200 hover:bg-black">
+                  <IoLogoInstagram className="text-black hover:text-white text-2xl transition-all duration-300" />
+                </div>{" "}
+              </Link>
 
-        {/* Quick Links */}
-        <div>
-          <h4 className="text-white text-lg font-semibold mb-4">Quick Links</h4>
-          <ul className="space-y-2">
-            <li>
-              <Link href={"/"} className="hover:text-white">
-                Home
+              <Link href={""}>
+                <div className="w-10 h-10 flex items-center justify-center border rounded-full transition-all duration-300 hover:bg-black">
+                  <FaGithub className="text-black hover:text-white text-2xl transition-all duration-300" />
+                </div>
               </Link>
-            </li>
-            <li>
-              <Link href={""} className="hover:text-white">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link href={""} className="hover:text-white">
-                Contact
-              </Link>
-            </li>
-            <li>
-              <Link href={"/signup"} className="hover:text-white">
-                Signup
-              </Link>
-            </li>
-            <li>
-              <Link href={"/login"} className="hover:text-white">
-                Login
-              </Link>
-            </li>
-          </ul>
-        </div>
+            </div>
+          </div>
+          <div className="footer-1 flex flex-col gap-3">
+            <h1 className="uppercase ">Company</h1>
+            <ul className="flex flex-col gap-2 text-[14px] ">
+              <li>
+                <Link href={""}>About</Link>
+              </li>
+              <li>
+                <Link href={""}>Contact us</Link>
+              </li>
+              <li>
+                <Link href={""}>About</Link>
+              </li>
+              <li>
+                <Link href={""}>About</Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* Products */}
-        <div>
-          <h4 className="text-white text-lg font-semibold mb-4">Products</h4>
-          <ul className="space-y-2">
-            <li>
-              <Link href={""} className="hover:text-white">
-                Shoes
-              </Link>
-            </li>
-            <li>
-              <Link href={""} className="hover:text-white">
-                Bags
-              </Link>
-            </li>
-            <li>
-              <Link href={""} className="hover:text-white">
-                Abaya
-              </Link>
-            </li>
-            <li>
-              <Link href={""} className="hover:text-white">
-                T-shirts
-              </Link>
-            </li>
-            <li>
-              <Link href={""} className="hover:text-white">
-                Jackets
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Contact */}
-        <div>
-          <h4 className="text-white text-lg font-semibold mb-4">Contact</h4>
-          <p>Phone: 05072337517</p>
-          <p>Address: Istanbul</p>
-          <p>Email: abdallahabdirisaa@gmail.com</p>
-        </div>
-
-        {/* Follow Us */}
-        <div>
-          <h4 className="text-white text-lg font-semibold mb-4">Follow Us</h4>
-          <div className="flex space-x-4">
-            <Link href={""} className="text-gray-400 hover:text-white">
-              X
-            </Link>
-            <Link
-              href={"/https://www.instagram.com/dhere_coder_/"}
-              className="text-gray-400 hover:text-white"
-            >
-              Instagram
-            </Link>
+          <div className="footer-1 flex flex-col gap-3">
+            <h1 className="uppercase ">Company</h1>
+            <ul className="flex flex-col gap-2 text-[14px] ">
+              <li>
+                <Link href={""}>About</Link>
+              </li>
+              <li>
+                <Link href={""}>Contact us</Link>
+              </li>
+              <li>
+                <Link href={""}>About</Link>
+              </li>
+              <li>
+                <Link href={""}>About</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-1 flex flex-col gap-5 ">
+            <h1 className="uppercase ">Company</h1>
+            <ul className="flex flex-col gap-3 text-[14px] ">
+              <li>
+                <Link href={""}>About</Link>
+              </li>
+              <li>
+                <Link href={""}>Contact us</Link>
+              </li>
+              <li>
+                <Link href={""}>About</Link>
+              </li>
+              <li>
+                <Link href={""}>About</Link>
+              </li>
+            </ul>
           </div>
         </div>
+        <Marquee>
+          <div className="date py-6 text-center">
+            <p className="text-slate-900 font-satoshi font-semibold">
+              Copy@right by Abdallah Abdirizak at {new Date().getFullYear()}
+            </p>
+          </div>
+        </Marquee>
       </div>
-      <div className="border-t border-gray-700 mt-10 pt-5 text-center">
-        <p>Copyright © {new Date().getFullYear()}. All rights reserved.</p>
-      </div>
-    </footer>
+    </div>
   );
 }

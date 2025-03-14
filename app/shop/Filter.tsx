@@ -1,8 +1,13 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+
+import { Sliders } from "lucide-react";
+import { useState } from "react";
+import "rc-slider/assets/index.css";
+import Slider from "rc-slider";
+import { toast, ToastContainer } from "react-toastify";
+import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowUp } from "react-icons/io";
 import Link from "next/link";
-import Loader from "../loading";
 
 interface Products {
   id: string;
@@ -12,6 +17,9 @@ interface Products {
   price: string;
   Category: string;
   Discount: string;
+  Size: string; // Added Size field
+  Stars: number; // Assuming Stars is a number, not a string
+  OldPrice?: string; // Optional OldPrice field
 }
 
 interface Prod {
@@ -19,139 +27,241 @@ interface Prod {
 }
 
 export default function Filter({ data }: Prod) {
-  const [filteredProducts, setFilteredProducts] = useState<Products[]>(data);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
-  const [loading, Setloading] = useState(false);
-  const [Isopen, Setisopn] = useState(false);
-  // Extract unique categories from data
-  const categories = Array.from(
-    new Set(data.map((product) => product.Catogery))
-  ).map((Catogery) => {
-    const count = data.filter(
-      (product) => product.Catogery === Catogery
-    ).length;
-    return { name: Catogery, count };
-  });
+  const [IsopenPrice, SetIsopenPrice] = useState(true);
+  const [IsopenSize, SetIsopenSize] = useState(true);
+  const [filter, Setfilter] = useState(data);
+  const [max, setMax] = useState(5000);
+  const [min, setMin] = useState(10);
+  const [isFilterd, SetIsfilter] = useState(false);
 
-  const priceRanges = [
-    { label: "$0.00 - $20.00", min: 0, max: 20 },
+  const [activeSize, setActiveSize] = useState<string | null>(null);
 
-    { label: "$20.00 - $50.00", min: 20, max: 50 },
-    { label: "$50.00 - $100.00", min: 50, max: 100 },
-    { label: "$100.00 - $200.00", min: 100, max: 200 },
-    { label: "$200.00 - $500.00", min: 200, max: 500 },
-  ];
+  // Extract and deduplicate sizes using a Set
+  const uniqueSizes = Array.from(
+    new Set(data.map((item) => item.size.toLowerCase())) // Create unique size list
+  );
 
-  useEffect(() => {
-    Setloading(true);
-    let filtered = data;
+  const handleSizeClick = (selectedSize: string) => {
+    setActiveSize(selectedSize);
+  };
 
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter((product) =>
-        selectedCategories.includes(product.Catogery)
-      );
+  const handleSliderChange = (values: number[]) => {
+    const [newMin, newMax] = values;
+    setMin(newMin);
+    setMax(newMax);
+  };
+  function Handlesort(order) {
+    const sortdata = [...data];
+    if (order === "Highest Price") {
+      sortdata.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    } else if (order === "Lowest Price") {
+      sortdata.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
     }
+    Setfilter(sortdata);
+  }
+  function HandleFilter() {
+    const filteredData = data.filter((item) => {
+      const price =
+        typeof item.price === "string"
+          ? parseFloat(item.price.replace("$", ""))
+          : item.price;
+      const inPriceRange = price >= min && price <= max;
 
-    if (selectedPriceRanges.length > 0) {
-      filtered = filtered.filter((product) =>
-        selectedPriceRanges.some((rangeLabel) => {
-          const range = priceRanges.find((r) => r.label === rangeLabel);
-          if (range) {
-            const price = parseFloat(product.price);
-            return price >= range.min && price <= range.max;
-          }
-          return false;
-        })
-      );
-    }
+      const matchesSize = activeSize ? item.size === activeSize : true;
 
-    setFilteredProducts(filtered);
-    Setloading(false);
-  }, [selectedCategories, selectedPriceRanges, data]);
+      return inPriceRange && matchesSize;
+    });
+    Setfilter(filteredData); // Update state with filtered data
+    SetIsfilter(true);
+    toast.success(`${filteredData.length} items Found`);
+  }
+  function Clearfilter() {
+    SetIsfilter(false);
 
-  // const handleCategoryChange = (category: string) => {
-  //   setSelectedCategories((prev) =>
-  //     prev.includes(category)
-  //       ? prev.filter((c) => c !== category)
-  //       : [...prev, category]
-  //   );
-  // };
-
-  // const handlePriceChange = (label: string) => {
-  //   setSelectedPriceRanges((prev) =>
-  //     prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
-  //   );
-  // };
-
+    Setfilter(data);
+    setActiveSize();
+    setMin(10);
+    setMax(5000);
+    toast.error("filter has been removed");
+  }
   return (
-    <div className="container mx-auto xl:max-w-[1450px] py-12 mt-12">
-      <div className="grid md:grid-cols-[17rem_1fr] gap-4">
-        <div className="p-4 h-max bg-gray-50 ">
-          <h2 className="text-lg font-semibold mb-4">Filters</h2>
+    <>
+      <ToastContainer />
+      <div className="container mx-auto xl:max-w-[1400px] mt-10 px-2 md:mt-20 py-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-1 justify-center">
+            <p>
+              <Link href={`/`} className="text-gray-400 block">
+                Home
+              </Link>
+            </p>
+            <p>
+              {" "}
+              <IoIosArrowForward className="text-gray-400" />
+            </p>
+          </div>
 
-          {/* Size Filter */}
-          <div className="mb-6">
-            <h3 className="text-sm font-semibold mb-2">Size</h3>
-            <div className="grid md:grid-cols-3 gap-2">
-              {["XS", "S", "M", "L", "XL", "2X"].map((size) => (
-                <button
-                  key={size}
-                  className="border border-gray-500 px-4 py-1 rounded hover:bg-gray-200"
-                >
-                  {size}
+          <p>Shop</p>
+        </div>
+        <div className="grid md:grid-cols-[18rem_1fr] items-start gap-4">
+          <div className="filter px-4 border h-max rounded-xl">
+            <div className="flex items-center justify-between w-full border-b py-4 mb-1">
+              <h1 className="font-satoshi font-semibold">Filters</h1>
+              <Sliders className="border-none h-5" color="#adb5bd" />
+            </div>
+
+            {/* Price Filter */}
+            <div className="w-full price border-b py-4 mb-3">
+              <div className="flex items-center justify-between mb-3">
+                <h1 className="font-satoshi font-semibold ">Price</h1>
+                <button onClick={() => SetIsopenPrice((item) => !item)}>
+                  {" "}
+                  {IsopenPrice ? <IoIosArrowUp /> : <IoIosArrowForward />}
                 </button>
+              </div>
+              {IsopenPrice && (
+                <>
+                  <Slider
+                    range
+                    value={[min, max]}
+                    min={10}
+                    max={5000}
+                    onChange={handleSliderChange}
+                    trackStyle={[{ backgroundColor: "black" }]}
+                    handleStyle={[
+                      { borderColor: "black" },
+                      { borderColor: "black" },
+                    ]}
+                    railStyle={{ backgroundColor: "#f1f3f5" }}
+                  />
+                  <div className="flex items-center justify-between w-full mt-2">
+                    <p className="text-gray-500">Min Price: ${min}</p>
+                    <p className="text-gray-500">Max Price: ${max}</p>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Size Filter */}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h1 className="font-satoshi font-semibold ">Size</h1>
+                <button onClick={() => SetIsopenSize((item) => !item)}>
+                  {" "}
+                  {IsopenSize ? <IoIosArrowUp /> : <IoIosArrowForward />}
+                </button>{" "}
+              </div>
+              {IsopenSize && (
+                <div className="size grid grid-cols-3 gap-4 border-b py-4 mb-2">
+                  {uniqueSizes.map((sizeOption) => (
+                    <button
+                      key={sizeOption}
+                      onClick={() => handleSizeClick(sizeOption)}
+                      className={`border py-1 px-3 rounded-full flex items-center justify-center transition-all ${
+                        activeSize === sizeOption
+                          ? "bg-black text-white"
+                          : "bg-transparent text-black"
+                      }`}
+                    >
+                      <span>{sizeOption.toUpperCase()}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <div className="py-5">
+              <button
+                onClick={HandleFilter}
+                type="submit"
+                className="text-center py-2 w-full bg-slate-950 text-white hover:bg-blue-500 transition-all duration-200 rounded-full"
+              >
+                Apply Filters
+              </button>
+            </div>
+            {isFilterd && (
+              <button
+                className="text-center py-2 w-full bg-[#f03e3e] mb-6 text-white hover:bg-[#ff6b6b] transition-all duration-200 rounded-full"
+                onClick={Clearfilter}
+              >
+                Clear filter
+              </button>
+            )}
+          </div>
+
+          {/* Product Listing */}
+          <div className="product  px-4 ">
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="text-xl font-satoshi font-semibold ">Shop</h1>
+              <div className="flex items-center gap-4">
+                <p className="text-gray-400 font-satoshi">
+                  Showing 0 - {filter.length} of {data.length} Product
+                </p>
+                <select
+                  title="select"
+                  onChange={(e) => Handlesort(e.target.value)}
+                  className="border  px-4 py-2 rounded-sm"
+                >
+                  <option>Sortby</option>
+
+                  <option value="Lowest Price">Lowest Price</option>
+                  <option value="Highest Price">Highest Price</option>
+                </select>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-5">
+              {filter.map((item) => (
+                <Link href={`/shop/${item.id}`} className="group" key={item.id}>
+                  <div className="h-80 overflow-hidden rounded-lg group">
+                    <img
+                      src={item.image}
+                      alt={item.description}
+                      className="w-full object-cover h-full group-hover:scale-110 transition-all duration-200"
+                    />
+                  </div>
+                  <h1 className="font-bold my-2.5">{item.name}</h1>
+                  <div className="flex items-center gap-3">
+                    <p className="flex items-center">
+                      {[...Array(item.Stars)].map((_, i) => (
+                        <svg
+                          key={i}
+                          width="18"
+                          height="17"
+                          viewBox="0 0 18 17"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8.8487 0.255005L11.4679 5.89491L17.6412 6.6431L13.0867 10.8769L14.2827 16.9793L8.8487 13.956L3.41466 16.9793L4.61073 10.8769L0.0562391 6.6431L6.22949 5.89491L8.8487 0.255005Z"
+                            fill="#FFC633"
+                          />
+                        </svg>
+                      ))}
+                    </p>
+                    <p>{item.Stars}.0/5</p>
+                  </div>
+                  <div className="flex items-center gap-2 my-2">
+                    <p className="font-semibold text-xl">${item.price}</p>
+                    {item.OldPrice && (
+                      <p className="text-gray-400 text-xl font-semibold line-through">
+                        ${item.OldPrice}
+                      </p>
+                    )}
+                    {item.Discount && (
+                      <div className="px-4 py-1 bg-[#ffebeb] rounded-full">
+                        <p className="text-[12px] text-[#FF3333]">
+                          {item.Discount}%
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
-
-          {/* Availability Filter */}
-
-          {/* Collapsible Sections */}
-          {["Category", "Ratings"].map((section) => (
-            <div key={section} className="mb-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-sm font-semibold">{section}</h3>
-                <span>&#x276F;</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-4 overflow-hidden">
-          {loading ? (
-            <Loader />
-          ) : filteredProducts.length > 0 ? (
-            filteredProducts.map((item) => (
-              <Link
-                href={`/shop/${item.id}`}
-                key={item.id}
-                className="border block overflow-hidden group rounded-md"
-              >
-                <div className="relative">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full group-hover:scale-105 transition-all duration-200 h-64 object-cover rounded-t-lg"
-                  />
-                  <span className="absolute top-2 left-2 bg-red-500 text-white text-sm px-2 py-1 rounded">
-                    %{item.Discount}
-                  </span>
-                </div>
-                <div className="px-4 my-3 ">
-                  <h1 className="text-xl font-semibold">{item.name}</h1>
-                  <p>{item.description}</p>
-                  <p className="text-green-600 font-bold">${item.price}</p>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <p className="col-span-3 text-center text-gray-500">
-              No products found.
-            </p>
-          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

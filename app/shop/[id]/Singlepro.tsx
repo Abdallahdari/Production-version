@@ -1,36 +1,34 @@
 "use client";
-import Link from "next/link";
+
 import React, { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
-// import { useDispatch } from "react-redux";
-import { Addingcart } from "./cartSlice";
+import { ToastContainer } from "react-toastify";
 
-export default function Singlepro({ product, similarProduct }) {
-  const [count, setCount] = useState(1);
-  const [mainImage, setMainImage] = useState(product.image); // For changing the main image
-  // const dispatch = useDispatch();
-  const decrease = () => {
-    setCount((prev) => (prev > 1 ? prev - 1 : 1)); // Prevent going below 1
-  };
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+  Discount?: number;
+}
 
-  const increase = () => {
-    if (count < 10) setCount((prev) => prev + 1);
-  };
+interface SingleproProps {
+  product: Product;
+  similarProduct: Product[];
+}
 
-  const addToCart = () => {
-    const Newitem = {
-      id: product.id,
-      name: product.name,
-      photo: product.image,
-      price: product.price,
-    };
-    // dispatch(Addingcart(Newitem));
-    toast.success(`added ${count} items to the cart!`, {
-      position: "top-right",
-    });
-    console.log(Newitem);
-  };
+export default function Singlepro({ product }: SingleproProps) {
+  const [count, setCount] = useState<number>(1);
+  const [mainImage, setMainImage] = useState<string>(product.image);
+
+  // Decrease quantity (min: 1)
+  const decrease = () => setCount((prev) => (prev > 1 ? prev - 1 : 1));
+
+  // Increase quantity (max: 10)
+  const increase = () => setCount((prev) => (prev < 10 ? prev + 1 : 10));
+
+  // Add to cart handler
 
   return (
     <div>
@@ -47,7 +45,7 @@ export default function Singlepro({ product, similarProduct }) {
                   src={product.image}
                   alt={`Thumbnail ${index + 1}`}
                   className="w-28 mb-6 h-28 object-cover border rounded-lg cursor-pointer"
-                  onClick={() => setMainImage(product.image)} // Change main image on click
+                  onClick={() => setMainImage(product.image)}
                 />
               ))}
             </div>
@@ -70,6 +68,7 @@ export default function Singlepro({ product, similarProduct }) {
               <span className="text-red-500"> %{product.Discount}</span>
             </p>
 
+            {/* Quantity Selector & Add to Cart Button */}
             <div className="mt-4 my-6">
               <div className="flex items-center gap-4">
                 <div className="flex items-center my-3 border border-gray-300 rounded-md">
@@ -87,10 +86,7 @@ export default function Singlepro({ product, similarProduct }) {
                     +
                   </button>
                 </div>
-                <button
-                  onClick={addToCart}
-                  className="w-full px-5 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-900 transition-all duration-200"
-                >
+                <button className="w-full px-5 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-900 transition-all duration-200">
                   Add to Cart
                 </button>
               </div>
@@ -113,41 +109,7 @@ export default function Singlepro({ product, similarProduct }) {
           <h1 className="my-6 text-center text-2xl font-semibold">
             Similar Products
           </h1>
-          <ul className="grid grid-cols-4 gap-4">
-            {similarProduct.map((item) => (
-              <Link
-                href={`/shop/${item.id}`}
-                key={item.id}
-                className="group w-full overflow-hidden border rounded-lg shadow-md"
-              >
-                <div className="relative">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-full group-hover:scale-105 transition-all duration-200 h-64 object-cover rounded-t-lg"
-                  />
-                  {item.discount && (
-                    <span className="absolute top-2 left-2 bg-red-500 text-white text-sm px-2 py-1 rounded">
-                      -{item.discount}%
-                    </span>
-                  )}
-                </div>
-                <div className="p-4 mt-3">
-                  <h3 className="text-lg font-medium truncate">{item.name}</h3>
-                  <div className="flex items-center justify-between mt-2">
-                    <div>
-                      <span className="text-gray-500 line-through text-sm">
-                        ${item.originalPrice || (item.price + 10).toFixed(2)}
-                      </span>
-                      <span className="text-green-600 font-semibold ml-2">
-                        ${item.price.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </ul>
+          <ul className="grid grid-cols-4 gap-4"></ul>
         </div>
       </div>
     </div>
