@@ -2,6 +2,7 @@ import React from "react";
 import { Topselling } from "../_lib/dataService";
 
 import Link from "next/link";
+export const revalidate = 60;
 
 export default async function NEWST() {
   const data = await Topselling();

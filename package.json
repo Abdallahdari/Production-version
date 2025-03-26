@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "prod": "next build && next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -26,6 +27,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
     "next": "15.1.6",
+    "next-auth": "^5.0.0-beta.25",
     "rc-slider": "^11.1.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

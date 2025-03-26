@@ -156,3 +156,19 @@ export async function Getorders() {
 
   return data;
 }
+export async function Signup({ email, password, name }) {
+  let { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { name },
+    },
+  });
+
+  if (error) {
+    console.log("Signup error:", error.message);
+    throw new Error(error.message);
+  }
+
+  return data;
+}

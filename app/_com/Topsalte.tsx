@@ -2,6 +2,7 @@ import React from "react";
 import { TOpProduct } from "../_lib/dataService";
 
 import Link from "next/link";
+export const revalidate = 60;
 
 export default async function Topsalte() {
   const data = await TOpProduct();

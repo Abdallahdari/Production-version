@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+export const revalidate = 60;
 
 interface Data {
   id: string;

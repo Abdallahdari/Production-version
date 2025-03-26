@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/shop/[id]/cartSlice.ts",
+    "app/reduxToolkit/cartSlice.ts",
     "app/store/StoreProvider.tsx",
     "app/store/store.ts"
   ],

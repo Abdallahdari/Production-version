@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
+export const revalidate = 60;
 
 // Corrected Blog interface
 interface Blog {

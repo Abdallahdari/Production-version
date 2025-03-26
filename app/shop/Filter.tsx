@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import Link from "next/link";
-
+export const revalidate = 60;
 interface Products {
   id: string;
   name: string;
@@ -91,7 +91,7 @@ export default function Filter({ data }: Prod) {
         <div className="flex items-center gap-3 mb-4">
           <div className="flex items-center gap-1 justify-center">
             <p>
-              <Link href={`/`} className="text-gray-400 block">
+              <Link href={`/shop}`} className="text-gray-400 block">
                 Home
               </Link>
             </p>

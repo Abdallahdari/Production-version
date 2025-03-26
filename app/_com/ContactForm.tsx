@@ -2,12 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+// import { useState } from "react";
 
 export default function ContactForm() {
-  const [email, Setemail] = useState();
-  const [password, SetPassword] = useState();
-  const [phone, SetPhone] = useState();
+  // const [email, Setemail] = useState();
+  // const [password, SetPassword] = useState();
+  // const [phone, SetPhone] = useState();
 
   return (
     <section className="w-full  max-w-6xl mx-auto p-4 md:p-6 my-16">

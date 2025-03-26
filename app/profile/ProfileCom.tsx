@@ -4,15 +4,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  Camera,
-  Check,
-  ChevronRight,
-  Loader2,
-  LogOut,
-  Package,
-  Search,
-} from "lucide-react";
+import { ChevronRight, Loader2, LogOut, Package } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,9 +22,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Getorders } from "../_lib/dataService";
 import Image from "next/image";
+import { SignoutAction } from "../_lib/actions";
 
 // Form validation schema
 const profileSchema = z.object({
@@ -169,28 +162,14 @@ const mockOrders: Order[] = [
   },
 ];
 
-export default function Profilecom({ data }: any) {
-  console.log(data);
+export default function Profilecom({ data, user }: any) {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordLoading, setIsPasswordLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Mock user data - in a real app, this would come from your backend
-  const userData = {
-    name: "John Doe",
-    email: "john@example.com",
-    bio: "Product designer and developer based in New York",
-    location: "New York, USA",
-    website: "https://johndoe.com",
-    avatar: "/placeholder.svg?height=100&width=100",
-    street: "123 Main Street",
-    city: "New York",
-    state: "NY",
-    postalCode: "10001",
-    country: "United States",
-  };
-
+  const userData = user?.user ?? "bdalla";
   const {
     register,
     handleSubmit,
@@ -230,8 +209,11 @@ export default function Profilecom({ data }: any) {
 
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
-
+    toast.success("updated");
     setIsLoading(false);
+  }
+  async function DEletetAccount() {
+    toast.success("Delete your account");
   }
 
   async function onPasswordSubmit(data: PasswordValues) {
@@ -239,17 +221,7 @@ export default function Profilecom({ data }: any) {
 
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    toast.success({
-      title: "Password changed",
-      description: "Your password has been changed successfully.",
-      action: (
-        <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center">
-          <Check className="h-4 w-4 text-primary" />
-        </div>
-      ),
-    });
-
+    toast.success("password Update");
     resetPassword();
     setIsPasswordLoading(false);
   }
@@ -284,15 +256,22 @@ export default function Profilecom({ data }: any) {
   };
 
   return (
-    <div className="container mx-auto xl:max-w-[1200px] py-24">
+    <div className="container mx-auto xl:max-w-[1200px] py-24 px-4">
+      <ToastContainer />
       <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold">Profile Settings</h1>
           <p className="text-muted-foreground">
-            Manage your account settings and preferences
+            Welcome mr {user.user.name} Manage your account settings and
+            preferences
           </p>
         </div>
-        <Button variant="outline" className="mt-4 md:mt-0" size="sm">
+        <Button
+          onClick={SignoutAction}
+          variant="outline"
+          className="mt-4 md:mt-0"
+          size="sm"
+        >
           <LogOut className="mr-2 h-4 w-4" />
           Log out
         </Button>
@@ -319,6 +298,7 @@ export default function Profilecom({ data }: any) {
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input
+                      readOnly
                       id="name"
                       {...register("name")}
                       className={errors.name ? "border-destructive" : ""}
@@ -332,6 +312,7 @@ export default function Profilecom({ data }: any) {
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
+                      readOnly
                       id="email"
                       type="email"
                       {...register("email")}
@@ -343,53 +324,8 @@ export default function Profilecom({ data }: any) {
                       </p>
                     )}
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="bio">Bio</Label>
-                    <Input
-                      id="bio"
-                      {...register("bio")}
-                      className={errors.bio ? "border-destructive" : ""}
-                    />
-                    {errors.bio && (
-                      <p className="text-sm text-destructive">
-                        {errors.bio.message}
-                      </p>
-                    )}
-                    <p className="text-xs text-muted-foreground">
-                      Brief description for your profile. URLs are hyperlinked.
-                    </p>
-                  </div>
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="location">Location</Label>
-                      <Input
-                        id="location"
-                        {...register("location")}
-                        className={errors.location ? "border-destructive" : ""}
-                      />
-                      {errors.location && (
-                        <p className="text-sm text-destructive">
-                          {errors.location.message}
-                        </p>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="website">Website</Label>
-                      <Input
-                        id="website"
-                        {...register("website")}
-                        className={errors.website ? "border-destructive" : ""}
-                      />
-                      {errors.website && (
-                        <p className="text-sm text-destructive">
-                          {errors.website.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+
                   <div className="space-y-2 pt-4">
-                    <h3 className="font-medium">Address Information</h3>
-                    <Separator className="my-2" />
                     <div className="space-y-2">
                       <Label htmlFor="street">Street Address</Label>
                       <Input
@@ -478,14 +414,13 @@ export default function Profilecom({ data }: any) {
               </form>
             </Card>
 
-            <Card>
+            <Card className="h-max">
               <CardHeader>
                 <CardTitle>Profile Picture</CardTitle>
-                <CardDescription>Update your profile picture</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col items-center space-y-4">
                 <Avatar className="h-32 w-32">
-                  <AvatarImage src={userData.avatar} alt={userData.name} />
+                  <AvatarImage src={userData.image} alt={userData.name} />
                   <AvatarFallback className="text-3xl">
                     {userData.name
                       .split(" ")
@@ -493,17 +428,12 @@ export default function Profilecom({ data }: any) {
                       .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    <Camera className="mr-2 h-4 w-4" />
-                    Change
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    Remove
-                  </Button>
-                </div>
+                <div className="flex gap-2"></div>
                 <p className="text-xs text-center text-muted-foreground">
-                  Recommended: Square JPG, PNG, or GIF, at least 500x500 pixels.
+                  {userData.name}
+                </p>
+                <p className="text-xs text-center text-muted-foreground">
+                  {userData.email}
                 </p>
               </CardContent>
             </Card>
@@ -628,7 +558,11 @@ export default function Profilecom({ data }: any) {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <Button variant="destructive" className="w-full">
+                  <Button
+                    onClick={DEletetAccount}
+                    variant="destructive"
+                    className="w-full"
+                  >
                     Delete Account
                   </Button>
                   <p className="text-xs text-center text-muted-foreground">

@@ -2,13 +2,19 @@
 
 import React, { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addCart } from "@/app/reduxToolkit/cartSlice";
+import Link from "next/link";
+import { SignoutAction } from "@/app/_lib/actions";
+export const revalidate = 60;
 
 interface Product {
   id: string;
   name: string;
   price: number;
   description: string;
+  size: string;
   image: string;
   Discount?: number;
 }
@@ -18,9 +24,10 @@ interface SingleproProps {
   similarProduct: Product[];
 }
 
-export default function Singlepro({ product }: SingleproProps) {
+export default function Singlepro({ product, user }: SingleproProps) {
   const [count, setCount] = useState<number>(1);
   const [mainImage, setMainImage] = useState<string>(product.image);
+  const dispatch = useDispatch();
 
   // Decrease quantity (min: 1)
   const decrease = () => setCount((prev) => (prev > 1 ? prev - 1 : 1));
@@ -28,7 +35,19 @@ export default function Singlepro({ product }: SingleproProps) {
   // Increase quantity (max: 10)
   const increase = () => setCount((prev) => (prev < 10 ? prev + 1 : 10));
 
-  // Add to cart handler
+  function Addcart() {
+    const Newitem = {
+      id: product.id, // Ensure ID is included
+      image: product.image,
+      name: product.name,
+      Discount: product.Discount,
+      size: product.size,
+      quantity: count, // Include quantity
+      price: product.price * count,
+    };
+    dispatch(addCart(Newitem));
+    toast.success("Item added to cart!");
+  }
 
   return (
     <div>
@@ -63,10 +82,12 @@ export default function Singlepro({ product }: SingleproProps) {
               ${product.price}
             </p>
             <p className="mt-2 text-gray-700">{product.description}</p>
-            <p className="mt-2 text-gray-700">
-              Discount{" "}
-              <span className="text-red-500"> %{product.Discount}</span>
-            </p>
+            {product.Discount && (
+              <p className="mt-2 text-gray-700">
+                Discount{" "}
+                <span className="text-red-500"> %{product.Discount}</span>
+              </p>
+            )}
 
             {/* Quantity Selector & Add to Cart Button */}
             <div className="mt-4 my-6">
@@ -86,9 +107,22 @@ export default function Singlepro({ product }: SingleproProps) {
                     +
                   </button>
                 </div>
-                <button className="w-full px-5 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-900 transition-all duration-200">
-                  Add to Cart
-                </button>
+
+                {user ? (
+                  <button
+                    onClick={Addcart}
+                    className="w-full px-5 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-900 transition-all duration-200"
+                  >
+                    Add to Cart
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => SignoutAction()}
+                    className="bg-slate-950 py-2 px-4 rounded-md text-white hover:bg-blue-600 transition-all duration-300"
+                  >
+                    Login To addcart
+                  </button>
+                )}
               </div>
             </div>
           </div>
