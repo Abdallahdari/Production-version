@@ -1,23 +1,22 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CiMenuFries } from "react-icons/ci";
 import { FaTimes } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
-import { useSelector } from "react-redux";
-import { Gettotal } from "../reduxToolkit/cartSlice";
+
 import Profileuser from "./Profileuser";
 import Unregstred from "./Unregstred";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 // import { useSelector } from "react-redux";
 // import { getTotal } from "../reduxToolkit/cartSlice";
 
-export default function MainNav({ user }) {
+export default function MainNav({ user }: any) {
   // const [item] = useState(0);
   const [Isopen, Setisopn] = useState(false);
   const [userOpen, SetisUser] = useState(false);
 
-  const total = useSelector(Gettotal);
   function HandlecolseUser() {
     SetisUser(false);
   }
@@ -71,11 +70,14 @@ export default function MainNav({ user }) {
                   className=" "
                 >
                   {user ? (
-                    <img
-                      src={user.user.image}
-                      className="w-7 h-7 rounded-full"
-                      alt={user.user.name}
-                    ></img>
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className=" bg-gray-300">
+                        {user.user.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
                   ) : (
                     <svg
                       className="fill-black hover:fill-[#1E90FF] cursor-pointer transition-all duration-200"
@@ -123,7 +125,7 @@ export default function MainNav({ user }) {
                   </svg>
                   <div className="absolute -right-4 -top-3  w-5 text-sm flex items-center justify-center text-center h-5 bg-red-600 text-white rounded-full">
                     <div className="flex items-center justify-center">
-                      <span>{total}</span>
+                      {/* <span>{Total}</span> */}
                     </div>
                   </div>
                 </Link>
@@ -140,6 +142,7 @@ export default function MainNav({ user }) {
           </div>
         </div>
       </div>
+      {/* Mobile Nav */}
       {Isopen && (
         <div className="mobile-nav    w-full z-50 fixed  inset-0 bg-white h-full ">
           <div>

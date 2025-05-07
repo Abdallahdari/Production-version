@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { addCart } from "@/app/reduxToolkit/cartSlice";
 import Link from "next/link";
 import { SignoutAction } from "@/app/_lib/actions";
-export const revalidate = 60;
+export const revalidate = 1000;
 
 interface Product {
   id: string;

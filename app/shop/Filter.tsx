@@ -37,9 +37,9 @@ export default function Filter({ data }: Prod) {
   const [activeSize, setActiveSize] = useState<string | null>(null);
 
   // Extract and deduplicate sizes using a Set
-  const uniqueSizes = Array.from(
-    new Set(data.map((item) => item.size.toLowerCase())) // Create unique size list
-  );
+  // const uniqueSizes = Array.from(
+  //   new Set(data.map((item) => item.size.toLowerCase())) // Create unique size list
+  // );
 
   const handleSizeClick = (selectedSize: string) => {
     setActiveSize(selectedSize);
@@ -148,10 +148,10 @@ export default function Filter({ data }: Prod) {
                 <h1 className="font-satoshi font-semibold ">Size</h1>
                 <button onClick={() => SetIsopenSize((item) => !item)}>
                   {" "}
-                  {IsopenSize ? <IoIosArrowUp /> : <IoIosArrowForward />}
+                  {/* {IsopenSize ? <IoIosArrowUp /> : <IoIosArrowForward />} */}
                 </button>{" "}
               </div>
-              {IsopenSize && (
+              {/* {IsopenSize && (
                 <div className="size grid grid-cols-3 gap-4 border-b py-4 mb-2">
                   {uniqueSizes.map((sizeOption) => (
                     <button
@@ -167,7 +167,7 @@ export default function Filter({ data }: Prod) {
                     </button>
                   ))}
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* Submit Button */}

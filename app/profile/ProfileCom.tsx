@@ -25,22 +25,15 @@ import { Badge } from "@/components/ui/badge";
 import { toast, ToastContainer } from "react-toastify";
 import { Getorders } from "../_lib/dataService";
 import Image from "next/image";
-import { SignoutAction } from "../_lib/actions";
+import { SignoutAction, UpdateUser } from "../_lib/actions";
 
 // Form validation schema
 const profileSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
-  bio: z
-    .string()
-    .max(160, { message: "Bio must not exceed 160 characters" })
-    .optional(),
-  location: z.string().optional(),
-  website: z
-    .string()
-    .url({ message: "Please enter a valid URL" })
-    .optional()
-    .or(z.literal("")),
+
+  Phone: z.string().optional(),
+
   street: z.string().optional(),
   city: z.string().optional(),
   state: z.string().optional(),
@@ -90,103 +83,29 @@ interface Order {
   trackingNumber?: string;
 }
 
-const mockOrders: Order[] = [
-  {
-    id: "ORD-12345",
-    date: "2023-12-15",
-    total: 129.99,
-    status: "delivered",
-    trackingNumber: "TRK-9876543",
-    items: [
-      {
-        id: "ITEM-1",
-        name: "Wireless Headphones",
-        price: 79.99,
-        quantity: 1,
-        image: "/placeholder.svg?height=80&width=80",
-      },
-      {
-        id: "ITEM-2",
-        name: "Phone Case",
-        price: 24.99,
-        quantity: 2,
-        image: "/placeholder.svg?height=80&width=80",
-      },
-    ],
-  },
-  {
-    id: "ORD-12346",
-    date: "2024-01-05",
-    total: 349.99,
-    status: "shipped",
-    trackingNumber: "TRK-9876544",
-    items: [
-      {
-        id: "ITEM-3",
-        name: "Smart Watch",
-        price: 349.99,
-        quantity: 1,
-        image: "/placeholder.svg?height=80&width=80",
-      },
-    ],
-  },
-  {
-    id: "ORD-12347",
-    date: "2024-02-20",
-    total: 59.97,
-    status: "processing",
-    items: [
-      {
-        id: "ITEM-4",
-        name: "T-Shirt",
-        price: 19.99,
-        quantity: 3,
-        image: "/placeholder.svg?height=80&width=80",
-      },
-    ],
-  },
-  {
-    id: "ORD-12348",
-    date: "2024-01-10",
-    total: 89.99,
-    status: "cancelled",
-    items: [
-      {
-        id: "ITEM-5",
-        name: "Bluetooth Speaker",
-        price: 89.99,
-        quantity: 1,
-        image: "/placeholder.svg?height=80&width=80",
-      },
-    ],
-  },
-];
-
-export default function Profilecom({ data, user }: any) {
+export default function Profilecom({ data, user, updat }: any) {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordLoading, setIsPasswordLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Mock user data - in a real app, this would come from your backend
-  const userData = user?.user ?? "bdalla";
+  const userData = user?.user;
   const {
     register,
-    handleSubmit,
+
     formState: { errors },
   } = useForm<ProfileValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: userData.name,
       email: userData.email,
-      bio: userData.bio,
-      location: userData.location,
-      website: userData.website,
-      street: userData.street,
-      city: userData.city,
-      state: userData.state,
-      postalCode: userData.postalCode,
-      country: userData.country,
+      street: updat.street,
+      city: updat.city,
+      state: updat.statE,
+      postalCode: updat.postalCode,
+      country: updat.country,
+      Phone: updat.Phone,
     },
   });
 
@@ -254,7 +173,22 @@ export default function Profilecom({ data, user }: any) {
     };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-
+  const Handlesubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const fomrData = new FormData(e.target);
+      await UpdateUser(fomrData);
+      toast.success("Updated successfully", {
+        duration: 500,
+        onClose: () => {
+          window.location.reload();
+        },
+      });
+    } catch (error) {
+      console.log("error", error);
+      return null;
+    }
+  };
   return (
     <div className="container mx-auto xl:max-w-[1200px] py-24 px-4">
       <ToastContainer />
@@ -293,7 +227,7 @@ export default function Profilecom({ data, user }: any) {
                   Update your personal details here
                 </CardDescription>
               </CardHeader>
-              <form onSubmit={handleSubmit(onProfileSubmit)}>
+              <form onSubmit={Handlesubmit}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
@@ -301,7 +235,9 @@ export default function Profilecom({ data, user }: any) {
                       readOnly
                       id="name"
                       {...register("name")}
-                      className={errors.name ? "border-destructive" : ""}
+                      className={`${
+                        errors.name ? "border-destructive" : ""
+                      } cursor-not-allowed`}
                     />
                     {errors.name && (
                       <p className="text-sm text-destructive">
@@ -316,7 +252,9 @@ export default function Profilecom({ data, user }: any) {
                       id="email"
                       type="email"
                       {...register("email")}
-                      className={errors.email ? "border-destructive" : ""}
+                      className={`${
+                        errors.email ? "border-destructive" : ""
+                      } cursor-not-allowed`}
                     />
                     {errors.email && (
                       <p className="text-sm text-destructive">
@@ -326,19 +264,35 @@ export default function Profilecom({ data, user }: any) {
                   </div>
 
                   <div className="space-y-2 pt-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="street">Street Address</Label>
-                      <Input
-                        id="street"
-                        {...register("street")}
-                        className={errors.street ? "border-destructive" : ""}
-                      />
-                      {errors.street && (
-                        <p className="text-sm text-destructive">
-                          {errors.street.message}
-                        </p>
-                      )}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="street">Phone Number</Label>
+                        <Input
+                          id="Phone"
+                          {...register("Phone")}
+                          className={errors.street ? "border-destructive" : ""}
+                        />
+                        {errors.street && (
+                          <p className="text-sm text-destructive">
+                            {errors.street.message}
+                          </p>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="street">Street Address</Label>
+                        <Input
+                          id="street"
+                          {...register("street")}
+                          className={errors.street ? "border-destructive" : ""}
+                        />
+                        {errors.street && (
+                          <p className="text-sm text-destructive">
+                            {errors.street.message}
+                          </p>
+                        )}
+                      </div>
                     </div>
+
                     <div className="grid gap-4 md:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="city">City</Label>

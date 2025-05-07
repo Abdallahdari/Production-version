@@ -1,3 +1,4 @@
+import { auth } from "./auth";
 import { supabase } from "./supabase";
 
 export async function getCabinas() {
@@ -171,4 +172,72 @@ export async function Signup({ email, password, name }) {
   }
 
   return data;
+}
+
+export async function GetUsers(email) {
+  const { data, error } = await supabase
+    .from("User")
+    .select("*")
+    .eq("email", email)
+    .single();
+
+  return data;
+}
+
+export async function CreateNewUser(newUser) {
+  const { data, error } = await supabase.from("User").insert([newUser]);
+  if (error) {
+    throw new Error("New Guest couldn't create it  ");
+  }
+  return data;
+}
+
+export async function Getcart() {
+  const session = await auth();
+  const userId = session.user.id;
+  if (!userId) {
+    console.error("No user ID found");
+    return;
+  }
+  const { data, error } = await supabase
+    .from("Cart")
+    .select(" Product(*)")
+    .eq("UserId", userId);
+
+  if (error) {
+    console.error("Error fetching cart:", error);
+  } else {
+    console.log("Cart items:", data);
+    return data;
+  }
+}
+
+export async function Getupdate() {
+  const session = await auth();
+  if (!session) return;
+
+  const { data, error } = await supabase
+    .from("User")
+    .select("*")
+    .eq("id", session.user.id)
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+export async function Getorderss() {
+  const { data, error } = await supabase
+    .from("tijaabo")
+    .select("tijabo")
+    .limit(1);
+
+  if (error) {
+    console.error("Error fetching data:", error.message);
+    return;
+  }
+
+  const firstItem = data?.[0]?.tijabo?.[0];
+  const seconditem = data?.[0]?.tijabo?.[1];
+  console.log("First item in tijabo:", firstItem, seconditem);
+  return { firstItem, seconditem };
 }

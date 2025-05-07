@@ -1,7 +1,9 @@
 import Link from "next/link";
 import React from "react";
-
-export default function Unregstred({ HandlecolseUser }) {
+interface Props {
+  HandlecolseUser: any;
+}
+export default function Unregstred({ HandlecolseUser }: Props) {
   return (
     <div className=" flex items-center justify-center">
       <div className="w-full">

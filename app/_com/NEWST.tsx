@@ -11,7 +11,7 @@ export default async function NEWST() {
   return (
     <div className="container mx-auto xl:max-w-[1200px] px-4 my-24">
       <h1 className="text-3xl md:text-5xl font-extrabold text-center mb-6 md:mb-12">
-        TOP SELLING
+        News Product
       </h1>
       <div className="grid md:grid-cols-4 gap-4">
         {data.map((item) => (

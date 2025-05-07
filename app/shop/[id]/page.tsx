@@ -1,11 +1,17 @@
-import { getCabinas, GetsingleProduct } from "@/app/_lib/dataService";
-import Singlepro from "./Singlepro";
 import { auth } from "@/app/_lib/auth";
+import {
+  getCabinas,
+  GetsingleProduct,
+  Getorderss,
+} from "@/app/_lib/dataService";
+import ProductPage from "@/components/ui/ProductSignle";
 
 export default async function page({ params }: { params: { id: string } }) {
   const product = await GetsingleProduct(params.id);
   const allProduct = await getCabinas();
   const user = await auth();
+  const Order = await Getorderss();
+  console.log("user", user, "order", Order);
   const similarProduct = allProduct?.filter(
     (item) => item.Catogery === product.Catogery && item.id !== product.id
   );
@@ -14,7 +20,7 @@ export default async function page({ params }: { params: { id: string } }) {
   console.log("similar", similarProduct);
   return (
     <div className="py-12">
-      <Singlepro product={product} user={user} />
+      <ProductPage product={product} />
     </div>
   );
 }

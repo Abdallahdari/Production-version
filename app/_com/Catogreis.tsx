@@ -23,12 +23,12 @@ export default async function Catogreis() {
           <div className="grid grid-cols-1 grid- md:grid-cols-2 md:grid-r-w  gap-6">
             {catogries.map((category) => (
               <div
-                key={category.id}
+                key={category.name}
                 className="group relative overflow-hidden rounded-lg shadow-md hover:shadow-lg"
               >
                 <img
                   src={category.photo}
-                  alt={category.title}
+                  alt={category.name}
                   className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
