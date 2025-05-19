@@ -12,10 +12,20 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import { Star, ThumbsDown, ThumbsUp } from "lucide-react";
-
-export default function ProductReviews() {
-  const [showReviewForm, setShowReviewForm] = useState(false);
+import { Loader2, Star, ThumbsDown, ThumbsUp } from "lucide-react";
+import { StarIcon } from "lucide-react";
+import { Createreviews } from "@/app/_lib/actions";
+import { toast, ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
+export default function ProductReviews({
+  product,
+  hasUserReviewed,
+  comment,
+  allReviews,
+}) {
+  const [showReviewForm, setShowReviewForm] = useState(true);
+  const [rating, setRating] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Mock reviews data - in a real app, you would fetch this from an API
   const reviews = [
@@ -70,101 +80,149 @@ export default function ProductReviews() {
   const ratingPercentages = ratingCounts.map(
     (count) => (count / totalReviews) * 100
   );
+  const router = useRouter();
+  const Handlesubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const formData = new FormData(e.target); // ✅ capture the form data
+    if (!rating) {
+      toast.error("you should rate ");
+      return null;
+    }
+    try {
+      await Createreviews(product, formData);
+
+      toast.success("Review submitted successfully", {
+        autoClose: 1000, // 1 second
+        onClose: () => {
+          window.location.reload();
+        },
+      });
+    } catch (error) {
+      toast.error("Failed to submit review");
+      console.error(error);
+    }
+  };
 
   return (
     <section className="mt-8">
+      <ToastContainer />
       <h2 className="text-xl font-bold">Customer Reviews</h2>
 
       <div className="mt-4 grid gap-4 md:grid-cols-[250px_1fr]">
-        {/* Rating Summary - More compact */}
-        <Card className="h-fit">
-          <CardHeader className="p-4">
-            <CardTitle className="text-lg">Rating Summary</CardTitle>
-            <CardDescription className="text-sm">
-              Based on {totalReviews} reviews
-            </CardDescription>
-            <div className="mt-1 flex items-center gap-2">
-              <div className="text-2xl font-bold">
-                {averageRating.toFixed(1)}
-              </div>
-              <div className="flex">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star
-                    key={i}
-                    className={`h-4 w-4 ${
-                      i <= Math.floor(averageRating)
-                        ? "fill-primary text-primary"
-                        : "text-muted-foreground"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="p-4 pt-0">
-            <div className="space-y-1">
-              {[5, 4, 3, 2, 1].map((rating) => (
-                <div key={rating} className="flex items-center gap-2">
-                  <div className="w-4 text-xs">{rating}★</div>
-                  <Progress
-                    value={ratingPercentages[rating - 1]}
-                    className="h-1.5"
-                  />
-                  <div className="w-8 text-right text-xs text-muted-foreground">
-                    {ratingCounts[rating - 1]}
+        {/* Rating  */}
+
+        {hasUserReviewed ? (
+          <p>{comment}</p>
+        ) : (
+          <Card className="h-fit">
+            <form onSubmit={Handlesubmit}>
+              <CardHeader className="p-4">
+                <CardTitle className="text-lg">Rating Summary</CardTitle>
+                <CardDescription className="text-sm">
+                  Based on 5 reviews
+                </CardDescription>
+                <div className="mt-1 flex items-center gap-2">
+                  <div className="text-2xl font-bold">
+                    {averageRating.toFixed(1)}
+                  </div>
+                  <div className="flex space-x-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setRating(star)}
+                        className="focus:outline-none"
+                      >
+                        <StarIcon
+                          className={`h-6 w-6 ${
+                            star <= rating
+                              ? "text-yellow-400 fill-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      </button>
+                    ))}
+                    <input type="hidden" name="stars" value={rating} required />
                   </div>
                 </div>
-              ))}
-            </div>
+              </CardHeader>
+              <CardContent className="p-4 pt-0">
+                <div className="space-y-1">
+                  {[5, 4, 3, 2, 1].map((star) => {
+                    // Calculate count of reviews for this star rating
+                    const count = allReviews.filter(
+                      (review) => review.rating === star
+                    ).length;
+                    // Calculate percentage (rounded to nearest integer)
+                    const percentage =
+                      allReviews.length > 0
+                        ? Math.round((count / allReviews.length) * 100)
+                        : 0;
 
-            <Button
-              className="mt-4 w-full text-sm"
-              size="sm"
-              onClick={() => setShowReviewForm(!showReviewForm)}
-            >
-              Write a Review
-            </Button>
-
-            {showReviewForm && (
-              <div className="mt-3 space-y-3">
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((rating) => (
-                    <Star
-                      key={rating}
-                      className="h-5 w-5 cursor-pointer text-muted-foreground hover:text-primary"
-                    />
-                  ))}
+                    return (
+                      <div key={star} className="flex items-center gap-2">
+                        <div className="w-4 text-xs">{star}★</div>
+                        <Progress
+                          value={percentage}
+                          className="h-1.5 text-yellow-400 fill-yellow-400"
+                        />
+                        <div className="w-8 text-right text-xs text-muted-foreground">
+                          {count}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-                <Textarea
-                  placeholder="Share your experience with this product..."
-                  className="text-sm"
-                />
-                <Button size="sm">Submit Review</Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
 
-        {/* Reviews List - More compact */}
+                <div className="mt-3 space-y-3">
+                  <Textarea
+                    name="comment"
+                    placeholder="Share your experience with this product..."
+                    className="text-sm"
+                  />
+                  <Button
+                    type="submit"
+                    className="hover:bg-slate-950 transition-all duration-300"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      "Save changes"
+                    )}
+                  </Button>{" "}
+                </div>
+              </CardContent>
+            </form>
+          </Card>
+        )}
+
+        {/* Reviews shown soo bandhigid */}
         <div className="space-y-3">
-          {reviews.map((review) => (
+          {allReviews.map((review) => (
             <Card key={review.id} className="overflow-hidden">
               <CardHeader className="p-3 pb-0">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-2">
                     <Avatar className="h-8 w-8">
                       <AvatarImage
-                        src={review.avatar || "/placeholder.svg"}
-                        alt={review.author}
+                        src={review.User?.avatar || "/placeholder.svg"}
+                        alt={review.User?.name}
                       />
-                      <AvatarFallback>{review.author.charAt(0)}</AvatarFallback>
+                      <AvatarFallback>
+                        {review.User?.name?.charAt(0) || "U"}
+                      </AvatarFallback>
                     </Avatar>
                     <div>
                       <div className="text-sm font-semibold">
-                        {review.author}
+                        {review.User?.name || "Anonymous"}
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        {review.date}
+                        {new Date(review.created_at).toLocaleDateString()}
                       </div>
                     </div>
                   </div>
@@ -174,44 +232,30 @@ export default function ProductReviews() {
                         key={i}
                         className={`h-3 w-3 ${
                           i <= review.rating
-                            ? "fill-primary text-primary"
+                            ? "text-yellow-400 fill-yellow-400"
                             : "text-muted-foreground"
                         }`}
                       />
                     ))}
                   </div>
                 </div>
-                <CardTitle className="mt-1 text-sm">{review.title}</CardTitle>
+                {review.title && (
+                  <CardTitle className="mt-1 text-sm">{review.title}</CardTitle>
+                )}
               </CardHeader>
               <CardContent className="p-3 pt-1">
                 <p className="text-xs text-muted-foreground">
-                  {review.content}
+                  {review.comment || review.content}
                 </p>
-                <div className="mt-2 flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-6 gap-1 text-xs"
-                  >
-                    <ThumbsUp className="h-3 w-3" />
-                    <span>Helpful ({review.helpful})</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-6 gap-1 text-xs"
-                  >
-                    <ThumbsDown className="h-3 w-3" />
-                    <span>Not Helpful ({review.unhelpful})</span>
-                  </Button>
-                </div>
               </CardContent>
             </Card>
           ))}
 
-          <Button variant="outline" size="sm" className="w-full text-sm">
-            Load More Reviews
-          </Button>
+          {allReviews.length >= 4 && (
+            <Button variant="outline" size="sm" className="w-full text-sm">
+              Load More Reviews
+            </Button>
+          )}
         </div>
       </div>
     </section>

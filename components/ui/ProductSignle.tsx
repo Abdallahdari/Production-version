@@ -1,33 +1,38 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ChevronLeft,
-  Heart,
-  Minus,
-  Plus,
-  Share2,
-  ShoppingCart,
-  Star,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ChevronLeft, Minus, Plus, ShoppingCart, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductReviews from "@/components/ui/Productrview";
-interface Product {
-  name: string;
-  image: string;
-  description: string;
-  price: string;
-  Discount: string;
-  Stars: string;
-  size: string;
-  Quantity: string;
-}
-interface ProductProbs {
-  product: Product;
-}
-export default function ProductPage({ product }: ProductProbs) {
+import { useState } from "react";
+import RelatedProducts from "./related";
+
+export default function ProductPage({
+  product,
+  user,
+  hasUserReviewed,
+  allReviews,
+  comment,
+  relatedProducts,
+}) {
+  const [quantity, setQuantity] = useState(1);
+  const decrease = () => {
+    const newValue = quantity - 1;
+    setQuantity(newValue);
+  };
+
+  const increase = () => {
+    const newValue = quantity + 1;
+    setQuantity(newValue);
+  };
+  // Calculate average rating from actual reviews
+  const averageRating =
+    allReviews.length > 0
+      ? allReviews.reduce((sum, review) => sum + review.rating, 0) /
+        allReviews.length
+      : 0;
   return (
     <main className="container mx-auto xl:max-w-[1200px] px-4 py-6 md:py-10">
       <div className="mb-6">
@@ -38,11 +43,10 @@ export default function ProductPage({ product }: ProductProbs) {
           </Link>
         </Button>
       </div>
-
       <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
         {/* Product Images */}
         <div className="flex flex-col gap-4">
-          <div className="overflow-hidden rounded-lg border bg-white">
+          <div className="overflow-hidden  bg-white">
             <Image
               src={product.image || "/placeholder.svg"}
               alt={product.name}
@@ -52,22 +56,6 @@ export default function ProductPage({ product }: ProductProbs) {
               priority
             />
           </div>
-          {/* <div className="flex gap-2">
-            {product.images.map((image, index) => (
-              <div
-                key={index}
-                className="overflow-hidden rounded-lg border bg-white"
-              >
-                <Image
-                  src={image || "/placeholder.svg"}
-                  alt={`${product.name} thumbnail ${index + 1}`}
-                  width={100}
-                  height={100}
-                  className="aspect-square h-20 w-20 cursor-pointer object-cover"
-                />
-              </div>
-            ))}
-          </div> */}
         </div>
 
         {/* Product Details */}
@@ -80,25 +68,22 @@ export default function ProductPage({ product }: ProductProbs) {
                   <Star
                     key={i}
                     className={`h-5 w-5 ${
-                      i < Math.floor(product.Stars)
-                        ? "fill-primary text-primary"
-                        : i < product.Stars
-                        ? "fill-primary text-primary"
+                      i < Math.floor(averageRating)
+                        ? "text-yellow-400 fill-yellow-400"
+                        : i < averageRating
+                        ? "text-yellow-400 fill-yellow-400"
                         : "text-muted-foreground"
                     }`}
                   />
                 ))}
                 <span className="ml-2 text-sm text-muted-foreground">
-                  ({product.reviewCount} reviews)
+                  ({allReviews.length} reviews)
                 </span>
               </div>
-              <Badge variant="outline" className="px-2 py-1">
-                {/* {product.inStock ? "In Stock" : "Out of Stock"} */}
-              </Badge>
             </div>
             <div className="mt-4">
               <span className="text-3xl font-bold">
-                {/* ${product.price.toFixed(2)} */}
+                ${product.price.toFixed(2)}
               </span>
             </div>
           </div>
@@ -106,15 +91,12 @@ export default function ProductPage({ product }: ProductProbs) {
           <Separator />
 
           {/* Color Selection */}
-          <div>
-            <h3 className="mb-2 text-sm font-medium">Color</h3>
-          </div>
 
           {/* Size Selection */}
-          <div>
-            <h3 className="mb-2 text-sm font-medium">Size</h3>
+          <div className="">
+            <h3 className="mb-2 text-sm font-medium">Size :</h3>
             <div className="flex gap-2">
-              {/* {product.size.map((size) => (
+              {product.sizes.map((size) => (
                 <Button
                   key={size}
                   variant="outline"
@@ -122,7 +104,7 @@ export default function ProductPage({ product }: ProductProbs) {
                 >
                   {size}
                 </Button>
-              ))} */}
+              ))}
             </div>
           </div>
 
@@ -131,6 +113,7 @@ export default function ProductPage({ product }: ProductProbs) {
             <h3 className="mb-2 text-sm font-medium">Quantity</h3>
             <div className="flex items-center">
               <Button
+                onClick={decrease}
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 rounded-r-none"
@@ -139,9 +122,10 @@ export default function ProductPage({ product }: ProductProbs) {
                 <span className="sr-only">Decrease</span>
               </Button>
               <div className="flex h-8 w-12 items-center justify-center border-y">
-                1
+                {quantity}{" "}
               </div>
               <Button
+                onClick={increase}
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 rounded-l-none"
@@ -181,9 +165,20 @@ export default function ProductPage({ product }: ProductProbs) {
           </Tabs>
         </div>
       </div>
-
       {/* Reviews Section */}
-      <ProductReviews />
+      {user && (
+        <ProductReviews
+          product={product}
+          hasUserReviewed={hasUserReviewed}
+          comment={comment}
+          allReviews={allReviews}
+        />
+      )}{" "}
+      {
+        //   Related section
+
+        <RelatedProducts relatedProducts={relatedProducts} />
+      }
     </main>
   );
 }

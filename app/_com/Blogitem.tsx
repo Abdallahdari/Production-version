@@ -67,15 +67,6 @@ export default function Blogitem({ data, Allproduct }: OneBlogs) {
                 style={{ height: "45vh" }} // 35% of viewport height
               />
             </div>
-            <div className="mt-6 flex space-x-2">
-              <span className="bg-gray-200 px-3 py-1 text-sm rounded-full">
-                {data.Category}
-              </span>
-
-              <span className="bg-gray-200 px-3 py-1 text-sm rounded-full">
-                DESIGN
-              </span>
-            </div>
             <div className="mt-8 flex items-center gap-2 mb-7 border-b pb-4">
               <img
                 src={data.autherImage}

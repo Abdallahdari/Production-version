@@ -2,6 +2,7 @@ import React from "react";
 import { SigninAction } from "@/app/_lib/actions";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import Image from "next/image";
+import LoginImage from "@/app/login/Login1.jpg";
 export default function page() {
   return (
     <form
@@ -46,12 +47,12 @@ export default function page() {
           <div className="absolute inset-0 bg-black opacity-20"></div>
           <div className="relative z-10 flex flex-col items-center justify-center p-12 text-white">
             <Image
-              src="/login-illustration.svg"
+              src={LoginImage}
               alt="Login illustration"
               width={400}
               height={400}
               priority
-              className="mb-8"
+              className="mb-8 rounded-md"
             />
             <h2 className="text-2xl font-bold text-center mb-4">
               Streamline Your Workflow

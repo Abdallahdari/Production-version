@@ -225,19 +225,103 @@ export async function Getupdate() {
   if (error) throw new Error(error.message);
   return data;
 }
-export async function Getorderss() {
-  const { data, error } = await supabase
-    .from("tijaabo")
-    .select("tijabo")
-    .limit(1);
+// Get all the users Names and thier reviews and also rating don't change this one start
+export async function Getreviews(ProductId, UserId) {
+  const user = await auth();
+  try {
+    // Check if user reviewed this product
+    const { data: userReview, error: userReviewError } = await supabase
+      .from("reviews")
+      .select("*,User:userID (name)")
+      .eq("productId", ProductId)
+      .eq("userID", UserId)
+      .maybeSingle();
 
-  if (error) {
-    console.error("Error fetching data:", error.message);
-    return;
+    if (user && userReviewError) {
+      console.error("Supabase user review error:", userReviewError);
+      throw new Error(`Couldn't fetch user review: ${userReviewError.message}`);
+    }
+
+    // Get all product reviews
+    const { data: allProductReviews, error: allReviewsError } = await supabase
+      .from("reviews")
+      .select("*,User:userID (name)")
+      .eq("productId", ProductId);
+
+    if (allReviewsError) {
+      console.error("Supabase all reviews error:", allReviewsError);
+      throw new Error(`Couldn't fetch all reviews: ${allReviewsError.message}`);
+    }
+
+    return {
+      hasUserReviewed: !!userReview,
+      userReview,
+      allReviews: allProductReviews || [],
+    };
+  } catch (error) {
+    console.error("Error in Getreviews:", error);
+    throw error; // Re-throw for the calling function
   }
+}
+// don't change this one end
+// Getting the Product with reiview start
+export async function getAllProductsWithRatings() {
+  try {
+    // Step 1: Get all products
+    const { data: products, error: productsError } = await supabase
+      .from("Product")
+      .select("*");
 
-  const firstItem = data?.[0]?.tijabo?.[0];
-  const seconditem = data?.[0]?.tijabo?.[1];
-  console.log("First item in tijabo:", firstItem, seconditem);
-  return { firstItem, seconditem };
+    if (productsError) {
+      console.error("Error fetching products:", productsError);
+      throw productsError;
+    }
+
+    // Step 2: Loop through each product to get its reviews
+    const productsWithRatings = await Promise.all(
+      products.map(async (product) => {
+        const { data: reviews, error: reviewError } = await supabase
+          .from("reviews")
+          .select("rating")
+          .eq("productId", product.id);
+
+        if (reviewError) {
+          console.error(
+            `Error fetching reviews for product ID ${product.id}:`,
+            reviewError
+          );
+          return { ...product, average_rating: 0, total_reviews: 0 };
+        }
+
+        // Calculate average rating
+        // const total = reviews?.length || 0;
+        // const sum = reviews?.reduce((acc, r) => acc + (r.star || 0), 0);
+        // const average = total > 0 ? sum / total : 0;
+
+        const total = reviews?.length || 0;
+
+        const sum = reviews?.reduce((acc, r) => {
+          // Use whichever field exists
+          const rating = r.rating !== undefined ? r.rating : r.star;
+          return acc + (Number(rating) || 0);
+        }, 0);
+
+        const average = total > 0 ? parseFloat((sum / total).toFixed(1)) : 0;
+
+        return {
+          ...product,
+          average_rating: average,
+          total_reviews: total,
+        };
+      })
+    );
+
+    return productsWithRatings;
+  } catch (error) {
+    console.error(
+      "❌ Error in getAllProductsWithRatings:",
+      JSON.stringify(error, null, 2)
+    );
+    throw error;
+  }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Sliders } from "lucide-react";
+import { Sliders, Star } from "lucide-react";
 import { useState } from "react";
 import "rc-slider/assets/index.css";
 import Slider from "rc-slider";
@@ -223,23 +223,20 @@ export default function Filter({ data }: Prod) {
                   <h1 className="font-bold my-2.5">{item.name}</h1>
                   <div className="flex items-center gap-3">
                     <p className="flex items-center">
-                      {[...Array(item.Stars)].map((_, i) => (
-                        <svg
+                      {[...Array(5)].map((_, i) => (
+                        <Star
                           key={i}
-                          width="18"
-                          height="17"
-                          viewBox="0 0 18 17"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M8.8487 0.255005L11.4679 5.89491L17.6412 6.6431L13.0867 10.8769L14.2827 16.9793L8.8487 13.956L3.41466 16.9793L4.61073 10.8769L0.0562391 6.6431L6.22949 5.89491L8.8487 0.255005Z"
-                            fill="#FFC633"
-                          />
-                        </svg>
+                          className={`h-5 w-5 ${
+                            i < Math.floor(item.average_rating)
+                              ? "text-yellow-400 fill-yellow-400" // Full star
+                              : i < item.average_rating
+                              ? "text-yellow-400 fill-yellow-400" // Half star (if you want to support half stars)
+                              : "text-muted-foreground" // Empty star
+                          }`}
+                        />
                       ))}
                     </p>
-                    <p>{item.Stars}.0/5</p>
+                    <p>{item.average_rating.toFixed(2)}/5</p>
                   </div>
                   <div className="flex items-center gap-2 my-2">
                     <p className="font-semibold text-xl">${item.price}</p>

@@ -174,6 +174,7 @@ export default function Profilecom({ data, user, updat }: any) {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
   const Handlesubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     try {
       const fomrData = new FormData(e.target);
@@ -212,9 +213,8 @@ export default function Profilecom({ data, user, updat }: any) {
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 md:w-auto">
+        <TabsList className="grid w-full grid-cols-2 md:w-auto">
           <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="account">Account</TabsTrigger>
           <TabsTrigger value="orders">Orders</TabsTrigger>
         </TabsList>
 
@@ -354,7 +354,11 @@ export default function Profilecom({ data, user, updat }: any) {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button type="submit" disabled={isLoading}>
+                  <Button
+                    type="submit"
+                    className="hover:bg-slate-950 transition-all duration-300"
+                    disabled={isLoading || register === null}
+                  >
                     {isLoading ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -391,141 +395,6 @@ export default function Profilecom({ data, user, updat }: any) {
                 </p>
               </CardContent>
             </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="account">
-          <div className="grid gap-6 md:grid-cols-3">
-            <Card className="md:col-span-2">
-              <CardHeader>
-                <CardTitle>Change Password</CardTitle>
-                <CardDescription>Update your password here</CardDescription>
-              </CardHeader>
-              <form onSubmit={handlePasswordSubmit(onPasswordSubmit)}>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="currentPassword">Current Password</Label>
-                    <Input
-                      id="currentPassword"
-                      type="password"
-                      {...registerPassword("currentPassword")}
-                      className={
-                        passwordErrors.currentPassword
-                          ? "border-destructive"
-                          : ""
-                      }
-                    />
-                    {passwordErrors.currentPassword && (
-                      <p className="text-sm text-destructive">
-                        {passwordErrors.currentPassword.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="newPassword">New Password</Label>
-                    <Input
-                      id="newPassword"
-                      type="password"
-                      {...registerPassword("newPassword")}
-                      className={
-                        passwordErrors.newPassword ? "border-destructive" : ""
-                      }
-                    />
-                    {passwordErrors.newPassword && (
-                      <p className="text-sm text-destructive">
-                        {passwordErrors.newPassword.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">
-                      Confirm New Password
-                    </Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      {...registerPassword("confirmPassword")}
-                      className={
-                        passwordErrors.confirmPassword
-                          ? "border-destructive"
-                          : ""
-                      }
-                    />
-                    {passwordErrors.confirmPassword && (
-                      <p className="text-sm text-destructive">
-                        {passwordErrors.confirmPassword.message}
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button type="submit" disabled={isPasswordLoading}>
-                    {isPasswordLoading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Updating...
-                      </>
-                    ) : (
-                      "Update password"
-                    )}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Card>
-
-            <div className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Email Notifications</CardTitle>
-                  <CardDescription>
-                    Manage your email notification preferences
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="marketing">Marketing emails</Label>
-                      <p className="text-xs text-muted-foreground">
-                        Receive emails about new products, features, and more.
-                      </p>
-                    </div>
-                    <Switch id="marketing" defaultChecked />
-                  </div>
-                  <Separator />
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="security">Security emails</Label>
-                      <p className="text-xs text-muted-foreground">
-                        Receive emails about your account security.
-                      </p>
-                    </div>
-                    <Switch id="security" defaultChecked />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Account Management</CardTitle>
-                  <CardDescription>
-                    Manage your account settings
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Button
-                    onClick={DEletetAccount}
-                    variant="destructive"
-                    className="w-full"
-                  >
-                    Delete Account
-                  </Button>
-                  <p className="text-xs text-center text-muted-foreground">
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
           </div>
         </TabsContent>
 
