@@ -15,7 +15,7 @@ export default async function page({ params }: { params: { id: string } }) {
     params.id,
     user?.user?.id
   ); // Fixed here  console.log("reivew");
-  // console.log("reivew", allReviews, hasUserReviewed);
+  console.log("reivew", allReviews, hasUserReviewed);
   const usernames = allReviews.map((review) => review.User?.name);
   const comment = userReview?.comment;
   console.log("userNames", usernames, comment);

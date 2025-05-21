@@ -111,15 +111,12 @@ export async function Createreviews(id, formData) {
 
 // Add this function to get reviews for all products
 export async function getProductsWithReviews() {
-  const { data: products, error } = await supabase
-    .from('products')
-    .select('*');
-    
+  const { data: products, error } = await supabase.from("products").select("*");
+
   if (error) throw error;
 
   // Get all reviews with product and user info
-  const { data: reviews, error: reviewError } = await supabase
-    .from('reviews')
+  const { data: reviews, error: reviewError } = await supabase.from("reviews")
     .select(`
       *,
       product:productId(*),
@@ -129,8 +126,35 @@ export async function getProductsWithReviews() {
   if (reviewError) throw reviewError;
 
   // Attach reviews to products
-  return products.map(product => ({
+  return products.map((product) => ({
     ...product,
-    reviews: reviews.filter(review => review.productId === product.id)
+    reviews: reviews.filter((review) => review.productId === product.id),
   }));
+}
+
+//
+export async function CreateContact(formData) {
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const text = formData.get("text");
+  const phone = formData.get("phone");
+  const topic = formData.get("topic");
+
+  console.log(formData);
+  const { data, error } = await supabase
+    .from("contact")
+    .insert([
+      {
+        phone: phone,
+        email: email,
+        question: text,
+        subject: topic,
+        name: name,
+      },
+    ])
+    .select();
+  if (error) {
+    throw new Error("couldn't Send the questions");
+  }
+  return data;
 }

@@ -28,7 +28,7 @@ interface Prod {
 
 export default function Filter({ data }: Prod) {
   const [IsopenPrice, SetIsopenPrice] = useState(true);
-  const [IsopenSize, SetIsopenSize] = useState(true);
+  const [SetIsopenSize] = useState(true);
   const [filter, Setfilter] = useState(data);
   const [max, setMax] = useState(5000);
   const [min, setMin] = useState(10);
@@ -40,10 +40,6 @@ export default function Filter({ data }: Prod) {
   // const uniqueSizes = Array.from(
   //   new Set(data.map((item) => item.size.toLowerCase())) // Create unique size list
   // );
-
-  const handleSizeClick = (selectedSize: string) => {
-    setActiveSize(selectedSize);
-  };
 
   const handleSliderChange = (values: number[]) => {
     const [newMin, newMax] = values;
@@ -236,7 +232,7 @@ export default function Filter({ data }: Prod) {
                         />
                       ))}
                     </p>
-                    <p>{item.average_rating.toFixed(2)}/5</p>
+                    <p>{item.average_rating.toFixed(1)}/5</p>
                   </div>
                   <div className="flex items-center gap-2 my-2">
                     <p className="font-semibold text-xl">${item.price}</p>
