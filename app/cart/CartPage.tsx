@@ -16,10 +16,6 @@ export default function CartPage({ response }) {
   const totalPrice = response.reduce((sum, item) => {
     return sum + item.quantity * (item.Product?.price || 0);
   }, 0);
-  const Discount = response.reduce(
-    (sum, item) => sum + (1 - item.Product?.Discount / 100),
-    0
-  );
 
   async function Delete(itemId) {
     console.log("Attempting to delete item:", itemId);
@@ -95,9 +91,9 @@ export default function CartPage({ response }) {
               </div>
               {/* <p>Discount :({Discount}%)</p> */}
               <div className="flex items-center justify-between w-full mt-2 py-2 border-b"></div>
-              <button className="w-full text-white mt-3 flex items-center justify-center py-4 hover:bg-blue-600 gap-3  bg-slate-950 rounded-full transition-all  duration-300  text-center">
-                <p>Go to Checkout </p> <MoveRight />
-              </button>
+              <div className="w-full text-white mt-3 flex items-center justify-center py-4 hover:bg-blue-600 gap-3  bg-slate-950 rounded-full transition-all  duration-300  text-center">
+                <Link href={"/buy"}>Go to Checkout </Link> <MoveRight />
+              </div>
             </div>
           </div>
         </>
