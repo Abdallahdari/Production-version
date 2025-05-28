@@ -191,27 +191,30 @@ export async function CreateNewUser(newUser) {
   }
   return data;
 }
-
+// before update
 export async function Getcart() {
-  const session = await auth();
-  const userId = session.user.id;
-  if (!userId) {
-    console.error("No user ID found");
-    return;
-  }
-  const { data, error } = await supabase
-    .from("Cart")
-    .select(" Product(*)")
-    .eq("UserId", userId);
+  try {
+    const session = await auth();
+    const userId = session?.user?.id;
 
-  if (error) {
-    console.error("Error fetching cart:", error);
-  } else {
-    console.log("Cart items:", data);
-    return data;
+    if (!userId) {
+      throw new Error("No user ID found");
+    }
+
+    const { data, error } = await supabase
+      .from("Cart")
+      .select("*, Product:ProductId(name,price,Discount ,image)") // More explicit relationship
+      .eq("UserId", userId);
+
+    if (error) throw error;
+
+    return data || [];
+  } catch (err) {
+    console.error("Error in Getcart:", err.message);
+    throw err;
   }
 }
-
+//
 export async function Getupdate() {
   const session = await auth();
   if (!session) return;

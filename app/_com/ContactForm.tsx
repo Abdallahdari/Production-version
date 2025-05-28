@@ -32,6 +32,8 @@ export default function ContactForm() {
       });
     } catch (error) {
       console.log("error has been acured from the contact page", error);
+      setIsLoading(false);
+
       toast.error("couln't send the massage");
     }
   };

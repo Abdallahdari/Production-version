@@ -30,7 +30,7 @@ export default function Filter({ data }: Prod) {
   const [IsopenPrice, SetIsopenPrice] = useState(true);
   const [SetIsopenSize] = useState(true);
   const [filter, Setfilter] = useState(data);
-  const [max, setMax] = useState(5000);
+  const [max, setMax] = useState(500);
   const [min, setMin] = useState(10);
   const [isFilterd, SetIsfilter] = useState(false);
 
@@ -77,7 +77,7 @@ export default function Filter({ data }: Prod) {
     Setfilter(data);
     setActiveSize();
     setMin(10);
-    setMax(5000);
+    setMax(500);
     toast.error("filter has been removed");
   }
   return (
@@ -121,7 +121,7 @@ export default function Filter({ data }: Prod) {
                     range
                     value={[min, max]}
                     min={10}
-                    max={5000}
+                    max={500}
                     onChange={handleSliderChange}
                     trackStyle={[{ backgroundColor: "black" }]}
                     handleStyle={[

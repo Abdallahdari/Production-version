@@ -180,7 +180,7 @@ export default function Profilecom({ data, user, updat }: any) {
       const fomrData = new FormData(e.target);
       await UpdateUser(fomrData);
       toast.success("Updated successfully", {
-        duration: 500,
+        autoClose: 1500,
         onClose: () => {
           window.location.reload();
         },

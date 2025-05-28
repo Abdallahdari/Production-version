@@ -1,6 +1,7 @@
 "use server";
 
 import { auth, signIn, signOut } from "./auth";
+import { Getcart } from "./dataService";
 import { supabase } from "./supabase";
 // update user
 export async function UpdateUser(formData) {
@@ -157,4 +158,144 @@ export async function CreateContact(formData) {
     throw new Error("couldn't Send the questions");
   }
   return data;
+}
+//  add cart before updating
+// export async function addcart(ProductId, quantity, sizes) {
+//   try {
+//     const user = await auth();
+//     const exisiting = await Getcart();
+//     if (!user) {
+//       throw new Error("User not authenticated");
+//     }
+
+//     const { data, error } = await supabase
+//       .from("Cart")
+//       .insert([
+//         {
+//           UserId: user.user.id,
+//           ProductId: ProductId,
+//           quantity: quantity,
+//           sizes: sizes,
+//         },
+//       ])
+//       .select();
+
+//     if (error) {
+//       console.error("Supabase error details:", error);
+//       throw new Error(`Couldn't add to cart: ${error.message}`);
+//     }
+
+//     return data;
+//   } catch (err) {
+//     console.error("Error in addcart function:", err);
+//     throw err; // Re-throw the error for the calling code to handle
+//   }
+// }
+// add cart after updating
+export async function addcart(ProductId, quantity, sizes) {
+  try {
+    // Validate inputs
+    if (!ProductId || !sizes) {
+      throw new Error("Product ID and size are required");
+    }
+    quantity = Number(quantity) || 1; // Ensure quantity is a number
+
+    const user = await auth();
+    if (!user?.user?.id) {
+      throw new Error("User not authenticated");
+    }
+
+    // First check if product exists
+    const { data: product, error: productError } = await supabase
+      .from("Product")
+      .select("*")
+      .eq("id", ProductId)
+      .single();
+
+    if (productError || !product) {
+      throw new Error("Product not found");
+    }
+
+    // Check for existing cart item
+    const { data: existingItems, error: fetchError } = await supabase
+      .from("Cart")
+      .select("*")
+      .eq("UserId", user.user.id)
+      .eq("ProductId", ProductId)
+      .eq("sizes", sizes)
+      .maybeSingle(); // Returns null instead of throwing if no match
+
+    if (fetchError) {
+      throw new Error(`Failed to check cart: ${fetchError.message}`);
+    }
+
+    // If exists, update quantity
+    if (existingItems) {
+      const newQuantity = existingItems.quantity + quantity;
+      const { data: updatedItem, error: updateError } = await supabase
+        .from("Cart")
+        .update({
+          quantity: newQuantity,
+        })
+        .eq("id", existingItems.id)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+      return updatedItem;
+    }
+
+    // Otherwise create new
+    const { data: newItem, error: insertError } = await supabase
+      .from("Cart")
+      .insert({
+        UserId: user.user.id,
+        ProductId,
+        quantity,
+        sizes,
+        created_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (insertError) throw insertError;
+    return newItem;
+  } catch (err) {
+    console.error("Cart operation failed:", err.message);
+    throw err;
+  }
+}
+
+export async function DeleteCart(cartItemId) {
+  try {
+    const user = await auth();
+
+    if (!user?.user?.id) {
+      throw new Error("User not authenticated");
+    }
+
+    console.log("Deleting cart item:", cartItemId, "for user:", user.user.id);
+
+    // Delete by cart item ID and user ID for security
+    const { error, data } = await supabase
+      .from("Cart")
+      .delete()
+      .eq("id", cartItemId) // Use cart item ID instead of ProductId
+      .eq("UserId", user.user.id)
+      .select(); // Add select to see what was deleted
+
+    if (error) {
+      console.error("Supabase delete error:", error);
+      throw error;
+    }
+
+    console.log("Deleted data:", data);
+
+    // Revalidate the cart page to reflect changes
+
+    return { success: true, deletedCount: data?.length || 0 };
+  } catch (error) {
+    console.error("Error in DeleteCart:", error);
+    throw error;
+  }
 }

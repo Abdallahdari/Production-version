@@ -77,16 +77,14 @@ export default function ProductReviews({
     ratingCounts[review.rating - 1]++;
   });
 
-  const ratingPercentages = ratingCounts.map(
-    (count) => (count / totalReviews) * 100
-  );
-  const router = useRouter();
   const Handlesubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const formData = new FormData(e.target); // ✅ capture the form data
     if (!rating) {
       toast.error("you should rate ");
+      setIsLoading(false);
+
       return null;
     }
     try {
@@ -109,11 +107,15 @@ export default function ProductReviews({
       <ToastContainer />
       <h2 className="text-xl font-bold">Customer Reviews</h2>
 
-      <div className="mt-4 grid gap-4 md:grid-cols-[250px_1fr]">
+      <div
+        className={`mt-4 grid gap-4 ${
+          hasUserReviewed ? "" : "md:grid-cols-[250px_1fr]"
+        } `}
+      >
         {/* Rating  */}
 
         {hasUserReviewed ? (
-          <p>{comment}</p>
+          ""
         ) : (
           <Card className="h-fit">
             <form onSubmit={Handlesubmit}>
@@ -202,9 +204,12 @@ export default function ProductReviews({
         )}
 
         {/* Reviews shown soo bandhigid */}
-        <div className="space-y-3">
+        <div className=" grid md:grid-cols-3  gap-4">
           {allReviews.map((review) => (
-            <Card key={review.id} className="overflow-hidden">
+            <Card
+              key={review.id}
+              className="overflow-hidden flex flex-col h-full"
+            >
               <CardHeader className="p-3 pb-0">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-2">
@@ -250,12 +255,6 @@ export default function ProductReviews({
               </CardContent>
             </Card>
           ))}
-
-          {allReviews.length >= 4 && (
-            <Button variant="outline" size="sm" className="w-full text-sm">
-              Load More Reviews
-            </Button>
-          )}
         </div>
       </div>
     </section>

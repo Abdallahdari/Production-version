@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Product {
+// Product interface
+export interface Product {
   id: string;
   name: string;
   price: number;
@@ -8,37 +9,68 @@ interface Product {
   image: string;
   size: string;
   Discount?: number;
+  quantity?: number;
 }
 
+// Cart state per user
 interface CartState {
-  cart: Product[];
+  [userId: string]: Product[];
 }
 
-const initialState: CartState = {
-  cart: [], // Cart should be an array
-};
+// Initial state
+const initialState: CartState = {};
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addCart: (state, action) => {
-      const exists = state.cart.find((item) => item.id === action.payload.id);
+    // Add product to Redux cart (after Supabase insert)
+    addCart: (
+      state,
+      action: PayloadAction<{ userId: string; product: Product }>
+    ) => {
+      const { userId, product } = action.payload;
+      if (!state[userId]) state[userId] = [];
+
+      const exists = state[userId].find((item) => item.id === product.id);
       if (!exists) {
-        state.cart.push(action.payload);
+        state[userId].push({ ...product, quantity: product.quantity || 1 });
       }
     },
-    remove: (state, action) => {
-      state.cart = state.cart.filter((item) => item.id !== action.payload);
+
+    // Remove product from Redux cart (after Supabase delete)
+    remove: (
+      state,
+      action: PayloadAction<{ userId: string; productId: string }>
+    ) => {
+      const { userId, productId } = action.payload;
+      if (state[userId]) {
+        state[userId] = state[userId].filter((item) => item.id !== productId);
+      }
+    },
+
+    // Load full cart from Supabase on login
+    setCart: (
+      state,
+      action: PayloadAction<{ userId: string; products: Product[] }>
+    ) => {
+      state[action.payload.userId] = action.payload.products;
     },
   },
 });
 
-// Selector to get total number of items in the cart
-//
-export const GetItem = (state: { cart: CartState }) => state.cart.cart;
-export const Gettotal = (state: { cart: CartState }) => state.cart.cart.length;
-export const GetTotalPrice = (state: { cart: CartState }) =>
-  state.cart.cart.reduce((total, item) => total + item.price, 0);
-export const { addCart, remove } = cartSlice.actions;
+// Selectors
+export const GetItems = (userId: string) => (state: { cart: CartState }) =>
+  state.cart[userId] || [];
+
+export const GetTotal = (userId: string) => (state: { cart: CartState }) =>
+  state.cart[userId]?.length || 0;
+
+export const GetTotalPrice = (userId: string) => (state: { cart: CartState }) =>
+  state.cart[userId]?.reduce(
+    (total, item) => total + item.price * (item.quantity || 1),
+    0
+  ) || 0;
+
+export const { addCart, remove, setCart } = cartSlice.actions;
 export default cartSlice.reducer;
