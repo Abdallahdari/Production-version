@@ -1,7 +1,6 @@
 "use server";
 
 import { auth, signIn, signOut } from "./auth";
-import { Getcart } from "./dataService";
 import { supabase } from "./supabase";
 // update user
 export async function UpdateUser(formData) {
@@ -43,32 +42,6 @@ export async function SigninAction() {
 export async function SignoutAction() {
   await signOut({ redirectTo: "/login" });
 }
-// export async function Createreviews(id, formData) {
-//   const user = await auth();
-//   const comment = formData.get("comment");
-//   const stars = formData.get("stars");
-//   const product = id;
-//   if (!user) {
-//     return null;
-//   }
-
-//   console.log(formData);
-//   const { data, error } = await supabase
-//     .from("reviews")
-//     .insert([
-//       {
-//         rating: stars,
-//         comment: comment,
-//         productId: product,
-//         userID: user.user.id,
-//       },
-//     ])
-//     .select();
-//   if (error) {
-//     console.log("error", error);
-//   }
-//   return data;
-// }
 
 export async function Createreviews(id, formData) {
   const user = await auth();
@@ -159,39 +132,7 @@ export async function CreateContact(formData) {
   }
   return data;
 }
-//  add cart before updating
-// export async function addcart(ProductId, quantity, sizes) {
-//   try {
-//     const user = await auth();
-//     const exisiting = await Getcart();
-//     if (!user) {
-//       throw new Error("User not authenticated");
-//     }
 
-//     const { data, error } = await supabase
-//       .from("Cart")
-//       .insert([
-//         {
-//           UserId: user.user.id,
-//           ProductId: ProductId,
-//           quantity: quantity,
-//           sizes: sizes,
-//         },
-//       ])
-//       .select();
-
-//     if (error) {
-//       console.error("Supabase error details:", error);
-//       throw new Error(`Couldn't add to cart: ${error.message}`);
-//     }
-
-//     return data;
-//   } catch (err) {
-//     console.error("Error in addcart function:", err);
-//     throw err; // Re-throw the error for the calling code to handle
-//   }
-// }
-// add cart after updating
 export async function addcart(ProductId, quantity, sizes) {
   try {
     // Validate inputs
@@ -298,4 +239,38 @@ export async function DeleteCart(cartItemId) {
     console.error("Error in DeleteCart:", error);
     throw error;
   }
+}
+//  payment fucntion
+export async function Payment(formData) {
+  const user = await auth();
+  const userId = user?.user?.id;
+
+  try {
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+
+    const { data, error } = await supabase
+      .from("Cart")
+      .select("* ,Product:ProductId")
+      .eq("UserId", userId);
+
+    if (error) {
+      throw new Error("couldn't fetch the cart");
+    }
+    console.log("cart", data);
+
+    const { orders, error: OrderError } = await supabase
+      .from("Orders-Main")
+      .insert([{ UserId: user.user.id }])
+      .select();
+    if (OrderError) {
+      throw new Error("error in payment", OrderError);
+    }
+    console.log("orders", orders);
+    // Fetch cart items for the current user
+  } catch (error) {
+    throw new Error("error in payment", error);
+  }
+  console.log(user);
 }

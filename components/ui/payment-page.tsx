@@ -17,6 +17,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { Payment } from "@/app/_lib/actions";
 
 export default function PaymentPage({ response, update }) {
   const UserData = update;
@@ -29,9 +30,20 @@ export default function PaymentPage({ response, update }) {
   const tax = 5;
   const shipping = 6;
   const total = totalPrice + tax + shipping;
+
+  async function Pay(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    try {
+      await Payment(formData);
+    } catch (error) {
+      console.log("Error From the frontend ", error);
+    }
+  }
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <form onSubmit={Pay} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <Button variant="ghost" className="mb-4">
@@ -93,6 +105,7 @@ export default function PaymentPage({ response, update }) {
                   <div className="space-y-2">
                     <Label htmlFor="cardNumber">Card Number</Label>
                     <Input
+                      name="Card"
                       id="cardNumber"
                       placeholder="1234 5678 9012 3456"
                       className="font-mono"
@@ -102,6 +115,7 @@ export default function PaymentPage({ response, update }) {
                     <div className="space-y-2">
                       <Label htmlFor="expiry">Expiry Date</Label>
                       <Input
+                        name="Date"
                         id="expiry"
                         placeholder="MM/YY"
                         className="font-mono"
@@ -109,12 +123,21 @@ export default function PaymentPage({ response, update }) {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="cvc">CVC</Label>
-                      <Input id="cvc" placeholder="123" className="font-mono" />
+                      <Input
+                        name="cvc"
+                        id="cvc"
+                        placeholder="123"
+                        className="font-mono"
+                      />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="cardName">Cardholder Name</Label>
-                    <Input id="cardName" placeholder="John Doe" />
+                    <Input
+                      name="cardname"
+                      id="cardName"
+                      placeholder="John Doe"
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -133,6 +156,7 @@ export default function PaymentPage({ response, update }) {
                   <div className="space-y-2">
                     <Label htmlFor="firstName"> Name</Label>
                     <Input
+                      name="name"
                       id="firstName"
                       placeholder={UserData.name}
                       readOnly
@@ -140,13 +164,19 @@ export default function PaymentPage({ response, update }) {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="firstName"> Phone</Label>
-                    <Input id="Phone" placeholder={UserData?.Phone} readOnly />
+                    <Input
+                      name="phone"
+                      id="Phone"
+                      placeholder={UserData?.Phone}
+                      readOnly
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder={update?.email}
                     readOnly
@@ -154,7 +184,12 @@ export default function PaymentPage({ response, update }) {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="address">Address</Label>
-                  <Input id="address" placeholder={update?.street} readOnly />
+                  <Input
+                    name="street"
+                    id="address"
+                    placeholder={update?.street}
+                    readOnly
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -163,12 +198,18 @@ export default function PaymentPage({ response, update }) {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="state">State</Label>
-                    <Input id="state" placeholder={update?.statE} readOnly />
+                    <Input
+                      name="statE"
+                      id="state"
+                      placeholder={update?.statE}
+                      readOnly
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="zipCode">ZIP Code</Label>
                   <Input
+                    name="postalcode"
                     id="zipCode"
                     placeholder={update?.postalCode}
                     readOnly
@@ -247,7 +288,7 @@ export default function PaymentPage({ response, update }) {
             </p>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
