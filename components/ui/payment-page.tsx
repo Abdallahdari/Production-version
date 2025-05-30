@@ -18,6 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Payment } from "@/app/_lib/actions";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function PaymentPage({ response, update }) {
   const UserData = update;
@@ -37,12 +38,19 @@ export default function PaymentPage({ response, update }) {
 
     try {
       await Payment(formData);
+      toast.success("payed Suceesfully", {
+        autoClose: 1500,
+        onClose: () => {
+          window.location.href = "/shop";
+        },
+      });
     } catch (error) {
       console.log("Error From the frontend ", error);
     }
   }
   return (
     <div className="min-h-screen bg-gray-50 py-8">
+      <ToastContainer />
       <form onSubmit={Pay} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -235,7 +243,7 @@ export default function PaymentPage({ response, update }) {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="flex items-center gap-1">
-                      <Truck className="h-4 w-4" />
+                      <Truck className="h-4 w-4 text-blue-600" />
                       Shipping
                     </span>
                     <span>${shipping}</span>
@@ -258,17 +266,21 @@ export default function PaymentPage({ response, update }) {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-center space-x-4 text-sm text-gray-600">
                   <div className="flex items-center gap-1">
-                    <Lock className="h-4 w-4" />
+                    <Lock className="h-4 w-4 text-blue-600" />
                     <span>SSL Encrypted</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Shield className="h-4 w-4" />
+                    <Shield className="h-4 w-4 text-blue-600" />
                     <span>Secure Payment</span>
                   </div>
                 </div>
                 <div className="flex justify-center mt-4 space-x-2">
-                  <Badge variant="outline">Visa</Badge>
-                  <Badge variant="outline">Mastercard</Badge>
+                  <Badge className="text-blue-600" variant="outline">
+                    Visa
+                  </Badge>
+                  <Badge className="text-blue-600" variant="outline">
+                    Mastercard
+                  </Badge>
                 </div>
               </CardContent>
             </Card>
@@ -279,7 +291,7 @@ export default function PaymentPage({ response, update }) {
               className="w-full hover:bg-blue-600 transition-all duration-300"
             >
               <Lock className="mr-2 h-4 w-4" />
-              Complete Order - ${totalPrice.toFixed(2)}
+              Complete Order - ${total.toFixed(2)}
             </Button>
 
             <p className="text-xs text-gray-500 text-center">

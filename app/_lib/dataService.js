@@ -328,3 +328,46 @@ export async function getAllProductsWithRatings() {
     throw error;
   }
 }
+export async function GetAllOrders() {
+  const user = await auth();
+  const userId = user?.user?.id;
+
+  if (!userId) {
+    throw new Error("no user found");
+  }
+  let { data, error } = await supabase
+    .from("Orders-Main")
+    .select("*")
+    .eq("UserId", userId);
+  if (error) {
+    throw new Error("no user found");
+  }
+  console.log("Orders", data);
+  return data;
+}
+
+export async function getUserOrders() {
+  const user = await auth();
+  const userId = user?.user?.id;
+  try {
+    const { data: orders, error } = await supabase
+      .from("Orders-Main")
+      .select(
+        `
+       
+        OrderItems:OrderItems (
+          quatitiy,
+     
+          Product:ProductID (*)
+        )
+      `
+      )
+      .eq("UserId", userId);
+
+    if (error) throw error;
+    return orders;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    throw new Error("Failed to fetch orders: " + error.message);
+  }
+}

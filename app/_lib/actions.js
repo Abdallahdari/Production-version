@@ -241,6 +241,115 @@ export async function DeleteCart(cartItemId) {
   }
 }
 //  payment fucntion
+// export async function Payment(formData) {
+//   const user = await auth();
+//   const userId = user?.user?.id;
+
+//   try {
+//     if (!user) {
+//       throw new Error("User not authenticated");
+//     }
+
+//     const { cartitmes, error } = await supabase
+//       .from("Cart")
+//       .select("* ,ProductId:Product")
+//       .eq("UserId", userId);
+
+//     if (error) {
+//       throw new Error("couldn't fetch the cart");
+//     }
+//     console.log("cart", data);
+//     const cartItem = cartitmes.map((item) => {
+//       return item.Product;
+//     });
+//     const { orders, error: OrderError } = await supabase
+//       .from("Orders-Main")
+//       .insert([{ UserId: user.user.id, ProductId: cartItem }])
+//       .select();
+//     if (OrderError) {
+//       throw new Error("error in payment", ProductId);
+//     }
+//     console.log("orders", orders);
+//     // Delete the cart items after creating the order
+//     const { error: deleteError } = await supabase
+//       .from("Cart")
+//       .delete()
+//       .eq("UserId", userId);
+//     if (deleteError) {
+//       throw new Error("couldn't delete the cart ");
+//     }
+//   } catch (error) {
+//     throw new Error("error in payment", error);
+//   }
+//   console.log(user);
+// }
+
+// export async function Payment(formData) {
+//   const user = await auth();
+//   const userId = user?.user?.id;
+
+//   try {
+//     if (!user) {
+//       throw new Error("User not authenticated");
+//     }
+
+//     // Fetch cart items
+//     const { data: cartItems, error: cartError } = await supabase
+//       .from("Cart")
+//       .select("*, Product:ProductId(*)")
+//       .eq("UserId", userId);
+
+//     if (cartError) {
+//       throw new Error("Couldn't fetch the cart: " + cartError.message);
+//     }
+
+//     if (!cartItems || cartItems.length === 0) {
+//       throw new Error("Cart is empty");
+//     }
+
+//     // Calculate total
+//     // const total = cartItems.reduce((sum, item) => {
+//     //   return sum + (item.Product?.price || 0) * (item.quantity || 1);
+//     // }, 0);
+//     const orderItems = cartItems.map((item) => ({
+//       ProductId: item.ProductId,
+//     }));
+
+//     // Create order
+//     const { data: order, error: orderError } = await supabase
+//       .from("Orders-Main")
+//       .insert([
+//         {
+//           UserId: userId,
+//           ProductId: orderItems,
+//         },
+//       ])
+//       .select()
+//       .single();
+
+//     if (orderError) {
+//       throw new Error("Error creating order: " + orderError.message);
+//     }
+
+//     // Create order items
+
+//     // Clear cart
+//     const { error: deleteError } = await supabase
+//       .from("Cart")
+//       .delete()
+//       .eq("UserId", userId);
+
+//     if (deleteError) {
+//       throw new Error("Couldn't delete the cart: " + deleteError.message);
+//     }
+
+//     return { success: true, orderId: order.id };
+//   } catch (error) {
+//     console.error("Payment error:", error);
+//     throw new Error("Payment failed: " + error.message);
+//   }
+// }
+
 export async function Payment(formData) {
   const user = await auth();
   const userId = user?.user?.id;
@@ -250,27 +359,59 @@ export async function Payment(formData) {
       throw new Error("User not authenticated");
     }
 
-    const { data, error } = await supabase
+    // Fetch cart items
+    const { data: cartItems, error: cartError } = await supabase
       .from("Cart")
-      .select("* ,Product:ProductId")
+      .select("*, Product:ProductId(*)")
       .eq("UserId", userId);
 
-    if (error) {
-      throw new Error("couldn't fetch the cart");
+    if (cartError) {
+      throw new Error("Couldn't fetch the cart: " + cartError.message);
     }
-    console.log("cart", data);
 
-    const { orders, error: OrderError } = await supabase
-      .from("Orders-Main")
-      .insert([{ UserId: user.user.id }])
-      .select();
-    if (OrderError) {
-      throw new Error("error in payment", OrderError);
+    if (!cartItems || cartItems.length === 0) {
+      throw new Error("Cart is empty");
     }
-    console.log("orders", orders);
-    // Fetch cart items for the current user
+
+    // Create the order
+    const { data: order, error: orderError } = await supabase
+      .from("Orders-Main")
+      .insert([{ UserId: userId }])
+      .select()
+      .single();
+
+    if (orderError) {
+      throw new Error("Error creating order: " + orderError.message);
+    }
+
+    // Create order items
+    const orderItems = cartItems.map((item) => ({
+      OrderId: order.id,
+      ProductID: item.ProductId,
+      quatitiy: item.quantity || 1,
+    }));
+
+    const { error: itemsError } = await supabase
+      .from("OrderItems")
+      .insert(orderItems);
+
+    if (itemsError) {
+      throw new Error("Error creating order items: " + itemsError.message);
+    }
+
+    // Clear cart
+    const { error: deleteError } = await supabase
+      .from("Cart")
+      .delete()
+      .eq("UserId", userId);
+
+    if (deleteError) {
+      throw new Error("Couldn't delete the cart: " + deleteError.message);
+    }
+
+    return { success: true, orderId: order.id };
   } catch (error) {
-    throw new Error("error in payment", error);
+    console.error("Payment error:", error);
+    throw new Error("Payment failed: " + error.message);
   }
-  console.log(user);
 }
