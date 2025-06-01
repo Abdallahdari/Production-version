@@ -1,15 +1,14 @@
 import React from "react";
 import { auth } from "../_lib/auth";
-import MainNav from "./MainNav";
-import { Getcart } from "../_lib/dataService";
+
+import NavbarCop from "./NavCo";
 
 export default async function Navbar() {
   const user = await auth();
-
-
+  console.log();
   return (
-    <div>
-      <MainNav user={user} />
+    <div className="sticky top-0 z-50 w-full ">
+      <NavbarCop user={user} />
     </div>
   );
 }

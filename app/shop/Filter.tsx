@@ -8,6 +8,9 @@ import { toast, ToastContainer } from "react-toastify";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import Link from "next/link";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 export const revalidate = 60;
 interface Products {
   id: string;
@@ -208,48 +211,61 @@ export default function Filter({ data }: Prod) {
             </div>
             <div className="grid md:grid-cols-3 gap-5">
               {filter.map((item) => (
-                <Link href={`/shop/${item.id}`} className="group" key={item.id}>
-                  <div className="h-80 overflow-hidden rounded-lg group">
-                    <img
-                      src={item.image}
-                      alt={item.description}
-                      className="w-full object-cover h-full group-hover:scale-110 transition-all duration-200"
-                    />
-                  </div>
-                  <h1 className="font-bold my-2.5">{item.name}</h1>
-                  <div className="flex items-center gap-3">
-                    <p className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-5 w-5 ${
-                            i < Math.floor(item.average_rating)
-                              ? "text-yellow-400 fill-yellow-400" // Full star
-                              : i < item.average_rating
-                              ? "text-yellow-400 fill-yellow-400" // Half star (if you want to support half stars)
-                              : "text-muted-foreground" // Empty star
-                          }`}
-                        />
-                      ))}
-                    </p>
-                    <p>{item.average_rating.toFixed(1)}/5</p>
-                  </div>
-                  <div className="flex items-center gap-2 my-2">
-                    <p className="font-semibold text-xl">${item.price}</p>
-                    {item.OldPrice && (
-                      <p className="text-gray-400 text-xl font-semibold line-through">
-                        ${item.OldPrice}
-                      </p>
-                    )}
-                    {item.Discount && (
-                      <div className="px-4 py-1 bg-[#ffebeb] rounded-full">
-                        <p className="text-[12px] text-[#FF3333]">
-                          {item.Discount}%
-                        </p>
+                <Card
+                  key={item.id}
+                  className="group cursor-pointer overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                >
+                  <Link href={`/shop/${item.id}`}>
+                    <div className="relative overflow-hidden">
+                      <Image
+                        src={item.image || "/placeholder.svg"}
+                        alt={item.name}
+                        width={250}
+                        height={300}
+                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <CardContent className="p-4 space-y-3">
+                      <h3 className="font-semibold group-hover:text-primary transition-colors">
+                        {item.name}
+                      </h3>
+                      <div className="flex items-center space-x-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${
+                              i < Math.floor(item.average_rating)
+                                ? "fill-yellow-400 text-yellow-400"
+                                : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                        <span className="text-sm text-muted-foreground ml-2">
+                          ({item.average_rating})
+                        </span>
                       </div>
-                    )}
-                  </div>
-                </Link>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-lg font-bold">
+                            ${item.price}
+                          </span>
+                          <span className="text-sm text-muted-foreground line-through">
+                            ${item.OldPrice}
+                          </span>
+                        </div>
+                        <p className="text-red-600">${item.Discount}</p>
+                      </div>
+                      <Link href={`/shop/${item.id}`}>
+                        <Button
+                          className="w-full bg-blue-600 hover:bg-slate-950 transition-all duration-300 "
+                          size="sm"
+                        >
+                          view the Product{" "}
+                        </Button>
+                      </Link>
+                    </CardContent>
+                  </Link>
+                </Card>
               ))}
             </div>
           </div>

@@ -1,26 +1,29 @@
 import React, { Suspense } from "react";
-import Header from "./_com/Header";
-import Catogreis from "./_com/Catogreis";
 import Loader from "./loading";
 import FAQSection from "./_com/FAQSection";
-import Topsalte from "./_com/Topsalte";
-import NEWST from "./_com/NEWST";
+
 import Testimonials from "./_com/Testimonials";
+import HeroCarousel from "./_com/Hero";
+import Catogery from "./_com/Catogery";
+import Feutred from "./_com/Feutred";
+import Trust from "./_com/Trust";
+import { getAllProductsWithRatings } from "./_lib/dataService";
 
-export default function page() {
+export default async function page() {
+  const data = await getAllProductsWithRatings();
+  console.log("rev", data);
   return (
-    <div>
-      <Header />
+    <div className="">
+      <HeroCarousel />
 
       <Suspense fallback={<Loader />}>
-        <Topsalte />
+        <Catogery />
       </Suspense>
       <Suspense fallback={<Loader />}>
-        <NEWST />
+        <Feutred data={data} />
       </Suspense>
-      <Catogreis />
+      <Trust />
       <Suspense fallback={<Loader />}>
-        {" "}
         <Testimonials />
       </Suspense>
 

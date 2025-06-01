@@ -83,7 +83,7 @@ interface Order {
   trackingNumber?: string;
 }
 
-export default function Profilecom({ data, user, updat }: any) {
+export default function Profilecom({ data, user, updat, orders }: any) {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordLoading, setIsPasswordLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -407,74 +407,45 @@ export default function Profilecom({ data, user, updat }: any) {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {filteredOrders.length > 0 ? (
-                    filteredOrders.map((order) => (
+                  {orders.length > 0 ? (
+                    orders.map((order) => (
                       <div
                         key={order.id}
-                        className="flex cursor-pointer flex-col items-start rounded-lg border p-4 transition-colors hover:bg-muted/50 sm:flex-row sm:items-center sm:justify-between"
+                        className=" cursor-pointer flex-col items-start rounded-lg border p-4 transition-colors hover:bg-muted/50 sm:flex-row sm:items-center sm:justify-between"
                         onClick={() => setSelectedOrder(order)}
                       >
-                        <div className="mb-2 flex w-full items-center gap-4 justify-between sm:mb-0 sm:w-auto">
-                          <div className="flex items-center gap-2">
-                            <img
-                              src={order.orderImage}
-                              alt={order.status}
-                              className="w-12 h-12 "
-                            />
-                            <div className="flex items-center gap-3">
-                              <p className="font-medium">{order.id}</p>
-                              <p className="font-medium">{order.name}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {formatDate(order.created_at)}
-                              </p>
-                            </div>
-                          </div>
-                          <Badge
-                            className={`${getStatusColor(
-                              order.status
-                            )} sm:hidden`}
-                          >
-                            {order.status.charAt(0).toUpperCase() +
-                              order.status.slice(1)}
-                          </Badge>
-                        </div>
-                        <div className="flex w-full items-center justify-between gap-4 sm:w-auto">
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium">${order.order_Price}</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Badge
-                              className={`${getStatusColor(
-                                order.status
-                              )} hidden sm:inline-flex`}
+                        <div className="mb-2 flex w-full flex-col gap-2 sm:mb-0 sm:w-auto">
+                          {order.OrderItems.map((item) => (
+                            <div
+                              key={item.id}
+                              className="flex items-center gap-4 w-full"
                             >
-                              {order.status.charAt(0).toUpperCase() +
-                                order.status.slice(1)}
-                            </Badge>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </div>
+                              <Image
+                                height={30}
+                                width={30}
+                                src={item.Product.image}
+                                alt={item.Product.name}
+                                className="w-12 h-12 rounded object-cover"
+                              />
+                              <div className="w-full  flex items-center justify-between">
+                                <p className="font-medium">
+                                  {item.Product.name}
+                                </p>
+
+                                <p className="text-sm">
+                                  Quantity: {item.quatitiy}
+                                </p>
+                                <p className="text-sm">
+                                  Price: ${item.Product.price}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-                      <Package className="mb-2 h-8 w-8 text-muted-foreground" />
-                      <h3 className="mb-1 font-medium">No orders found</h3>
-                      <p className="text-sm text-muted-foreground">
-                        {searchQuery
-                          ? `No orders matching "${searchQuery}"`
-                          : "You haven't placed any orders yet"}
-                      </p>
-                      {searchQuery && (
-                        <Button
-                          variant="link"
-                          className="mt-2"
-                          onClick={() => setSearchQuery("")}
-                        >
-                          Clear search
-                        </Button>
-                      )}
-                    </div>
+                    <p>No orders found.</p>
                   )}
                 </div>
               </CardContent>

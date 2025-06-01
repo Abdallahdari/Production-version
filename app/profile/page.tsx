@@ -9,10 +9,10 @@ export default async function page() {
   const data = await Getorders();
   const orders = await getUserOrders();
   const updat = await Getupdate();
-  console.log("order", orders);
+  console.log("ORDERS", JSON.stringify(orders, null, 2));
   return (
     <div>
-      <Profilecom data={data} user={user} updat={updat} />
+      <Profilecom data={data} user={user} updat={updat} orders={orders} />
     </div>
   );
 }

@@ -94,7 +94,7 @@ export async function Topselling() {
   return data;
 }
 
-export async function Reviews() {
+export async function Testimonial() {
   const { data, error } = await supabase.from("Testimonials").select("*");
   if (error) {
     console.log("error", error.message);
@@ -346,26 +346,62 @@ export async function GetAllOrders() {
   return data;
 }
 
+// export async function getUserOrders() {
+//   const user = await auth();
+//   const userId = user?.user?.id;
+//   try {
+//     const { data: orders, error } = await supabase
+//       .from("Orders-Main")
+//       .select(
+//         `
+
+//         OrderItems:OrderItems (
+//           quatitiy,
+
+//           Product:ProductID (*)
+//         )
+//       `
+//       )
+//       .eq("UserId", userId);
+
+//     if (error) throw error;
+//     return orders;
+//   } catch (error) {
+//     console.error("Error fetching orders:", error);
+//     throw new Error("Failed to fetch orders: " + error.message);
+//   }
+// }
+
 export async function getUserOrders() {
   const user = await auth();
   const userId = user?.user?.id;
+
   try {
-    const { data: orders, error } = await supabase
+    const { data, error } = await supabase
       .from("Orders-Main")
       .select(
         `
+        id,
        
-        OrderItems:OrderItems (
-          quatitiy,
      
-          Product:ProductID (*)
+        OrderItems (
+          id,
+          quatitiy,
+          ProductID,
+          Product:ProductID (
+            id,
+            name,
+            price,
+            image
+          )
         )
       `
       )
       .eq("UserId", userId);
 
     if (error) throw error;
-    return orders;
+    console.log(JSON.stringify(data, null, 2));
+    return data;
   } catch (error) {
     console.error("Error fetching orders:", error);
     throw new Error("Failed to fetch orders: " + error.message);
