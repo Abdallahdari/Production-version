@@ -4,7 +4,7 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ChevronRight, Loader2, LogOut, Package } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,11 +19,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
+
 import { toast, ToastContainer } from "react-toastify";
-import { Getorders } from "../_lib/dataService";
 import Image from "next/image";
 import { SignoutAction, UpdateUser } from "../_lib/actions";
 
@@ -83,11 +80,9 @@ interface Order {
   trackingNumber?: string;
 }
 
-export default function Profilecom({ data, user, updat, orders }: any) {
+export default function Profilecom({ user, updat, orders }: any) {
   const [isLoading, setIsLoading] = useState(false);
-  const [isPasswordLoading, setIsPasswordLoading] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [setSelectedOrder] = useState<Order | null>(null);
 
   // Mock user data - in a real app, this would come from your backend
   const userData = user?.user;
@@ -109,70 +104,12 @@ export default function Profilecom({ data, user, updat, orders }: any) {
     },
   });
 
-  const {
-    register: registerPassword,
-    handleSubmit: handlePasswordSubmit,
-    formState: { errors: passwordErrors },
-    reset: resetPassword,
-  } = useForm<PasswordValues>({
-    resolver: zodResolver(passwordSchema),
-    defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    },
-  });
-
-  async function onProfileSubmit(data: ProfileValues) {
-    setIsLoading(true);
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    toast.success("updated");
-    setIsLoading(false);
-  }
-  async function DEletetAccount() {
-    toast.success("Delete your account");
-  }
-
-  async function onPasswordSubmit(data: PasswordValues) {
-    setIsPasswordLoading(true);
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    toast.success("password Update");
-    resetPassword();
-    setIsPasswordLoading(false);
-  }
-
   // Filter orders based on search query
-  const filteredOrders = data;
 
   // Get status badge color
-  const getStatusColor = (status: OrderStatus) => {
-    switch (status) {
-      case "delivered":
-        return "bg-green-500";
-      case "processing":
-        return "bg-blue-500";
-      case "shipped":
-        return "bg-yellow-500";
-      case "cancelled":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
 
   // Format date
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+
   const Handlesubmit = async (e) => {
     setIsLoading(true);
     e.preventDefault();

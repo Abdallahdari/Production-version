@@ -12,18 +12,17 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Star, ThumbsDown, ThumbsUp } from "lucide-react";
+import { Loader2, Star } from "lucide-react";
 import { StarIcon } from "lucide-react";
 import { Createreviews } from "@/app/_lib/actions";
 import { toast, ToastContainer } from "react-toastify";
-import { useRouter } from "next/navigation";
+
 export default function ProductReviews({
   product,
   hasUserReviewed,
   comment,
   allReviews,
 }) {
-  const [showReviewForm, setShowReviewForm] = useState(true);
   const [rating, setRating] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
 
