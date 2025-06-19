@@ -2,7 +2,7 @@ import React from "react";
 import { SigninAction } from "@/app/_lib/actions";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import Image from "next/image";
-import LoginImage from "@/app/login/Login1.jpg";
+import LoginImage from "../../public/galid.jpg";
 export default function page() {
   return (
     <form
