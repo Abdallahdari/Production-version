@@ -144,7 +144,7 @@ export default function Filter({ data }: Prod) {
             {/* Size Filter */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h1 className="font-satoshi font-semibold ">Size</h1>
+                {/* <h1 className="font-satoshi font-semibold ">Size</h1> */}
                 <button onClick={() => SetIsopenSize((item) => !item)}>
                   {" "}
                   {/* {IsopenSize ? <IoIosArrowUp /> : <IoIosArrowForward />} */}

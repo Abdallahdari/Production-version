@@ -107,8 +107,16 @@ export default function BlogsGrid({ data }: BlogsGridProps) {
               </div>
               <div className="p-4">
                 <p className="text-gray-500 text-sm">{blog.Date}</p>
-                <h3 className="text-lg font-semibold mt-2">{blog.topic}</h3>
-                <p>{blog.Smlldescription}</p>
+                <h3 className="text-lg font-semibold mt-2 ">
+                  {blog.topic.length > 20
+                    ? blog.topic.slice(0, 30) + "..."
+                    : blog.topic}
+                </h3>
+                <p>
+                  {blog.Smlldescription.length > 40
+                    ? blog.Smlldescription.slice(0, 40) + "..."
+                    : blog.Smlldescription}
+                </p>{" "}
               </div>
             </Link>
           ))}

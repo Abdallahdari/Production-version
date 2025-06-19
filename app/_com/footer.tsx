@@ -52,23 +52,25 @@ export default function footer() {
             <h3 className="text-lg font-semibold text-white">Connect</h3>
             <div className="space-y-2">
               <Link
-                href="#"
+                href={"https://github.com/settings/profile"}
+                className="block text-sm hover:text-white transition-colors"
+              >
+                Github
+              </Link>
+              <Link
+                href={"https://www.instagram.com/d50som/"}
                 className="block text-sm hover:text-white transition-colors"
               >
                 Instagram
               </Link>
-              <Link
-                href="#"
-                className="block text-sm hover:text-white transition-colors"
-              >
-                Facebook
-              </Link>
 
               <Link
-                href="#"
+                href={
+                  "https://www.linkedin.com/in/abdullahi-abdirizak-mohamed-96b5a4253/"
+                }
                 className="block text-sm hover:text-white transition-colors"
               >
-                About us
+                Linkedin
               </Link>
             </div>
           </div>

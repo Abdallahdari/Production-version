@@ -1,10 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import sawir from "@/public/sawirDh.jpg";
 import sawir2 from "@/public/shop2.jpg";
+import Link from "next/link";
 export default function HeroCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -148,7 +149,7 @@ export default function HeroCarousel() {
 
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Button size="lg" className="text-lg px-8 bg-blue-600">
-                      {slide.ctaPrimary}
+                      <Link href={"/shop"}>{slide.ctaPrimary}</Link>
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                     <Button

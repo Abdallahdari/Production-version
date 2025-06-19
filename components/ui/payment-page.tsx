@@ -24,7 +24,7 @@ export default function PaymentPage({ response, update }) {
   const UserData = update;
   console.log("user", UserData);
   const [paymentMethod, setPaymentMethod] = useState("card");
-
+  const [number, SetNumbers] = useState();
   const totalPrice = response.reduce((sum, item) => {
     return sum + item.quantity * (item.Product?.price || 0);
   }, 0);

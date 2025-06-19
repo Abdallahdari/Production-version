@@ -1,10 +1,16 @@
 import React from "react";
-import BlogsGrid from "@/app/_com/BlogsGrid";
-import Link from "next/link";
+
 import { Award, Badge, Globe, Heart, Shield, Truck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import start from "@/public/star.jpg";
+import linc from "@/public/linc.jpg";
+import phasing from "@/public/First phase.jpg";
+import mission from "@/public/mission.jpg";
 import Image from "next/image";
+import Ecom from "@/public/E-com.jpg";
+import Founder from "@/public/cop.jpg";
+import Link from "next/link";
 export default function page() {
   return (
     <div className="">
@@ -21,7 +27,7 @@ export default function page() {
                     </Badge>
                     <h1 className="text-4xl lg:text-6xl font-bold tracking-tight">
                       About
-                      <span className="text-primary block">StyleHub</span>
+                      <span className="text-primary block">Dalab</span>
                     </h1>
                     <p className="text-xl text-muted-foreground max-w-lg">
                       We're passionate about bringing you the finest fashion and
@@ -32,9 +38,12 @@ export default function page() {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4">
-                    <Button size="lg" className="text-lg px-8">
-                      Shop Our Collection
-                    </Button>
+                    <Link href={"/"}>
+                      <Button size="lg" className="text-lg px-8">
+                        Shop Our Collection
+                      </Button>
+                    </Link>
+
                     <Button
                       variant="outline"
                       size="lg"
@@ -48,11 +57,11 @@ export default function page() {
                 <div className="relative">
                   <div className="relative z-10">
                     <Image
-                      src="/placeholder.svg?height=600&width=500"
+                      src={Ecom}
                       alt="StyleHub Team"
                       width={500}
                       height={600}
-                      className="rounded-2xl shadow-2xl"
+                      className="rounded-2xl  shadow-2xl"
                     />
                   </div>
                   <div className="absolute -top-4 -right-4 w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
@@ -91,30 +100,26 @@ export default function page() {
                   <div className="grid grid-cols-2 gap-6">
                     <div className="text-center">
                       <div className="text-3xl font-bold text-primary">
-                        2018
+                        2024
                       </div>
                       <div className="text-sm text-muted-foreground">
                         Founded
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-primary">
-                        50K+
-                      </div>
+                      <div className="text-3xl font-bold text-primary">6+</div>
                       <div className="text-sm text-muted-foreground">
                         Happy Customers
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-primary">25+</div>
+                      <div className="text-3xl font-bold text-primary">2+</div>
                       <div className="text-sm text-muted-foreground">
                         Countries
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-primary">
-                        1000+
-                      </div>
+                      <div className="text-3xl font-bold text-primary">40+</div>
                       <div className="text-sm text-muted-foreground">
                         Products
                       </div>
@@ -124,7 +129,7 @@ export default function page() {
 
                 <div className="relative">
                   <Image
-                    src="/placeholder.svg?height=500&width=600"
+                    src={mission}
                     alt="Our Mission"
                     width={600}
                     height={500}
@@ -205,32 +210,27 @@ export default function page() {
               <div className="space-y-12">
                 {[
                   {
-                    year: "2018",
+                    year: "2024",
                     title: "The Beginning",
                     description:
-                      "StyleHub was founded with a vision to make premium fashion accessible to everyone. Started with just 50 products and a small team of 3.",
-                    image: "/placeholder.svg?height=300&width=400",
+                      "Dalab was founded with the vision of connecting Somalia to global markets through a secure and user-friendly e-commerce platform. With a 1 person, we are on a mission to empower individuals and businesses to shop internationally with ease.",
+
+                    image: start,
+                  },
+
+                  {
+                    year: "at the end of 2024",
+                    title: "First Phase Completion",
+                    description:
+                      "We’ve successfully completed the first phase of Dalab, launching our initial platform with two admin roles who can create blogs and add products. Users can now explore products, read blogs, and make purchases—marking a major step toward connecting Somalia with global trade.",
+                    image: phasing,
                   },
                   {
-                    year: "2019",
-                    title: "First Milestone",
+                    year: "2025",
+                    title: "Launched",
                     description:
-                      "Reached 1,000 customers and expanded our product line to include accessories and home goods. Opened our first warehouse.",
-                    image: "/placeholder.svg?height=300&width=400",
-                  },
-                  {
-                    year: "2021",
-                    title: "Global Expansion",
-                    description:
-                      "Launched international shipping to 15 countries. Partnered with sustainable brands and introduced our eco-friendly collection.",
-                    image: "/placeholder.svg?height=300&width=400",
-                  },
-                  {
-                    year: "2023",
-                    title: "Innovation & Growth",
-                    description:
-                      "Launched our mobile app, introduced AR try-on features, and reached 50,000+ happy customers worldwide.",
-                    image: "/placeholder.svg?height=300&width=400",
+                      "The system was successfully deployed and made publicly accessible.",
+                    image: linc,
                   },
                 ].map((milestone, index) => (
                   <div
@@ -245,12 +245,7 @@ export default function page() {
                       }`}
                     >
                       <div className="space-y-2">
-                        <Badge
-                          variant="outline"
-                          className="text-primary border-primary"
-                        >
-                          {milestone.year}
-                        </Badge>
+                        {milestone.year}
                         <h3 className="text-2xl font-bold">
                           {milestone.title}
                         </h3>
@@ -268,8 +263,8 @@ export default function page() {
                         src={milestone.image || "/placeholder.svg"}
                         alt={milestone.title}
                         width={400}
-                        height={300}
-                        className="rounded-xl shadow-lg w-full"
+                        height={600}
+                        className="rounded-xl h-[600px] shadow-lg w-full"
                       />
                     </div>
                   </div>
@@ -293,22 +288,9 @@ export default function page() {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
                   {
-                    name: "Sarah Chen",
+                    name: "Abdallah abdirizak mohamed",
                     role: "Founder & CEO",
-                    bio: "Fashion industry veteran with 15+ years of experience. Passionate about sustainable fashion.",
-                    image: "/placeholder.svg?height=300&width=250",
-                  },
-                  {
-                    name: "Marcus Johnson",
-                    role: "Head of Design",
-                    bio: "Award-winning designer who believes in the power of style to transform confidence.",
-                    image: "/placeholder.svg?height=300&width=250",
-                  },
-                  {
-                    name: "Emily Rodriguez",
-                    role: "Customer Experience Director",
-                    bio: "Dedicated to ensuring every customer has an exceptional experience with StyleHub.",
-                    image: "/placeholder.svg?height=300&width=250",
+                    bio: "FUll stack devloper and also the founder of Dalab",
                   },
                 ].map((member, index) => (
                   <Card
@@ -317,7 +299,7 @@ export default function page() {
                   >
                     <div className="relative">
                       <Image
-                        src={member.image || "/placeholder.svg"}
+                        src={Founder}
                         alt={member.name}
                         width={250}
                         height={300}
@@ -344,7 +326,7 @@ export default function page() {
             <div className="container mx-auto xl:max-w-[1400px]">
               <div className="text-center space-y-4 mb-16">
                 <h2 className="text-3xl lg:text-4xl font-bold">
-                  Why Choose StyleHub?
+                  Why Choose Dalab?
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                   We're more than just a fashion retailer - we're your style
@@ -406,7 +388,7 @@ export default function page() {
           </section>
 
           {/* Call to Action */}
-          <section className="py-16 lg:py-24 bg-primary text-primary-foreground">
+          {/* <section className="py-16 lg:py-24 bg-primary text-primary-foreground">
             <div className="container text-center  mx-auto xl:max-w-[1400px]">
               <div className="max-w-2xl mx-auto space-y-6">
                 <h2 className="text-3xl lg:text-4xl font-bold">
@@ -434,7 +416,7 @@ export default function page() {
                 </div>
               </div>
             </div>
-          </section>
+          </section> */}
         </main>
 
         {/* Footer */}

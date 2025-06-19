@@ -8,9 +8,9 @@ export default function Feutred({ data }) {
   console.log("rev", data);
   const slicedData = data.slice(0, 8);
   return (
-    <div className="container  bg-slate-50">
-      <section className="py-16 lg:py-24 mx-auto xl:max-w-[1400px]">
-        <div className="container">
+    <div className="bg-slate-50">
+      <section className="container py-16 lg:py-24 mx-auto xl:max-w-[1400px]">
+        <div className="">
           <div className="text-center space-y-4 mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold">Trending Now</h2>
             <p className="text-lg text-muted-foreground">
