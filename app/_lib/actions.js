@@ -350,7 +350,7 @@ export async function DeleteCart(cartItemId) {
 //   }
 // }
 
-export async function Payment(formData) {
+export async function Payment() {
   const user = await auth();
   const userId = user?.user?.id;
 

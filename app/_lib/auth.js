@@ -12,7 +12,7 @@ const authConfig = {
   secret: process.env.NEXTUTH_SECRET,
 
   callbacks: {
-    authorized({ auth, request }) {
+    authorized({ auth }) {
       return !!auth?.user;
     },
     async signIn({ user }) {
@@ -23,10 +23,11 @@ const authConfig = {
 
         return true;
       } catch (error) {
+        console.log(error);
         return false;
       }
     },
-    async session({ session, user }) {
+    async session({ session }) {
       const GuestUser = await GetUsers(session.user.email);
       session.user.id = GuestUser.id;
       return session;

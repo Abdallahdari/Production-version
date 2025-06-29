@@ -11,7 +11,8 @@ export default function Trust() {
               Why Choose Dalab?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We're committed to providing you with the best shopping experience
+              We&quot;re committed to providing you with the best shopping
+              experience
             </p>
           </div>
 

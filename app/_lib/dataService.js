@@ -175,7 +175,7 @@ export async function Signup({ email, password, name }) {
 }
 
 export async function GetUsers(email) {
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("User")
     .select("*")
     .eq("email", email)

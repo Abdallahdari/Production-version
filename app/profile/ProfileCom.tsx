@@ -41,24 +41,6 @@ const profileSchema = z.object({
 type ProfileValues = z.infer<typeof profileSchema>;
 
 // Password change schema
-const passwordSchema = z
-  .object({
-    currentPassword: z
-      .string()
-      .min(1, { message: "Current password is required" }),
-    newPassword: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters" }),
-    confirmPassword: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters" }),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
-
-type PasswordValues = z.infer<typeof passwordSchema>;
 
 // Mock order data
 type OrderStatus = "delivered" | "processing" | "shipped" | "cancelled";

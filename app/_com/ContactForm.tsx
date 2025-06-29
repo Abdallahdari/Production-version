@@ -71,8 +71,8 @@ export default function ContactForm() {
               <div className="mb-6 ">
                 <h3 className="text-xl font-medium mb-2">Send us a message</h3>
                 <p className="text-gray-600 text-sm">
-                  if you have any questions or any idea send with you're email ,
-                  name , phone and you're question or idea
+                  if you have any questions or any idea send with you&apos;re
+                  email , name , phone and you&apos;re question or idea
                 </p>
               </div>
 

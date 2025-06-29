@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
-import Image from "next/image";
 import React from "react";
 import { Testimonial } from "../_lib/dataService";
 
@@ -15,7 +14,7 @@ export default async function Testimonials() {
               What Our Customers Say
             </h2>
             <p className="text-lg text-muted-foreground">
-              Don't just take our word for it
+              Don&quot;t just take our word for it
             </p>
           </div>
 

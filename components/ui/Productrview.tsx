@@ -20,7 +20,6 @@ import { toast, ToastContainer } from "react-toastify";
 export default function ProductReviews({
   product,
   hasUserReviewed,
-  comment,
   allReviews,
 }) {
   const [rating, setRating] = useState<number>(0);

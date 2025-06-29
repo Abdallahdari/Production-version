@@ -30,9 +30,9 @@ export default function page() {
                       <span className="text-primary block">Dalab</span>
                     </h1>
                     <p className="text-xl text-muted-foreground max-w-lg">
-                      We're passionate about bringing you the finest fashion and
-                      lifestyle products from around the world. Our journey
-                      began with a simple mission: to make premium style
+                      We&apos;re passionate about bringing you the finest
+                      fashion and lifestyle products from around the world. Our
+                      journey began with a simple mission: to make premium style
                       accessible to everyone.
                     </p>
                   </div>
@@ -91,9 +91,9 @@ export default function page() {
                   <div className="space-y-4">
                     <h3 className="text-2xl font-semibold">Our Vision</h3>
                     <p className="text-muted-foreground">
-                      To become the world's most trusted fashion destination,
-                      where style meets substance, and every customer feels
-                      confident and beautiful in their choices.
+                      To become the world&apos;s most trusted fashion
+                      destination, where style meets substance, and every
+                      customer feels confident and beautiful in their choices.
                     </p>
                   </div>
 
@@ -329,8 +329,8 @@ export default function page() {
                   Why Choose Dalab?
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  We're more than just a fashion retailer - we're your style
-                  partner
+                  We&apos;re more than just a fashion retailer - we&apos;re your
+                  style partner
                 </p>
               </div>
 

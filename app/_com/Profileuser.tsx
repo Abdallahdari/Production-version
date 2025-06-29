@@ -1,24 +1,10 @@
 import Link from "next/link";
 import React from "react";
-import { LogOut } from "lucide-react";
 import { House } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { SignoutAction } from "../_lib/actions";
 
 export default function Profileuser({ HandelCOlose, user }) {
-  const userData = {
-    name: "Abdallah Abdirizak",
-    email: "john@example.com",
-    bio: "Product designer and developer based in New York",
-    location: "New York, USA",
-    website: "https://johndoe.com",
-    avatar: "/placeholder.svg?height=100&width=100",
-    street: "123 Main Street",
-    city: "New York",
-    state: "NY",
-    postalCode: "10001",
-    country: "United States",
-  };
   return (
     <form action={SignoutAction} className="flex flex-col gap-6">
       <div className="flex items-center  gap-3">
