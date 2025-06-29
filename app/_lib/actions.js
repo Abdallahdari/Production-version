@@ -40,7 +40,7 @@ export async function SigninAction() {
 }
 // singout
 export async function SignoutAction() {
-  await signOut({ redirectTo: "/login" });
+  await signOut({ redirectTo: "/Login" });
 }
 
 export async function Createreviews(id, formData) {

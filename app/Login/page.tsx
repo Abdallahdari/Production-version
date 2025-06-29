@@ -3,7 +3,13 @@ import { SigninAction } from "@/app/_lib/actions";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import Image from "next/image";
 import LoginImage from "../../public/galid.jpg";
-export default function page() {
+import { auth } from "../_lib/auth";
+import { redirect } from "next/navigation";
+export default async function page() {
+  const user = await auth();
+  if (user) {
+    redirect("/");
+  }
   return (
     <form
       action={SigninAction}
