@@ -4,8 +4,6 @@ import "./globals.css";
 import Navbar from "./_com/Navbar";
 import Footer from "./_com/footer";
 import Providers from "./reduxToolkit/Provider";
-import NavbarCop from "./_com/NavCo";
-import { auth } from "./_lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,8 +25,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await auth();
-
   return (
     <html lang="en">
       <body

@@ -31,7 +31,8 @@ export default async function Testimonials() {
                     ))}
                   </div>
                   <p className="text-muted-foreground italic">
-                    "{testimonial.Review}"
+                    &quot;
+                    {testimonial.Review}&quot;
                   </p>
                   <div className="flex items-center space-x-3">
                     <div>

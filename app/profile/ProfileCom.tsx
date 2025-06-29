@@ -62,7 +62,7 @@ interface Order {
   trackingNumber?: string;
 }
 
-export default function Profilecom({ user, updat, orders }: any) {
+export default function Profilecom({ user, updat, orders }) {
   const [isLoading, setIsLoading] = useState(false);
   const [setSelectedOrder] = useState<Order | null>(null);
 
