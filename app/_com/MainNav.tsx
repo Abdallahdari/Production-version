@@ -128,7 +128,7 @@ export default function MainNav({ user }) {
                 </div>
               ) : (
                 <div>
-                  <Link href={"/login"} className="relative">
+                  <Link href={"/Login"} className="relative">
                     <svg
                       className="fill-black hover:fill-[#1E90FF] cursor-pointer transition-all duration-200"
                       width="17"

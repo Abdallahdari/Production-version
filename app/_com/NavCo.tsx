@@ -69,7 +69,7 @@ export default function NavbarCop({ user }) {
                 </Avatar>
               </button>
             ) : (
-              <Link href={"/login"}>
+              <Link href={"/Login"}>
                 <Button
                   variant="ghost"
                   size="sm"
